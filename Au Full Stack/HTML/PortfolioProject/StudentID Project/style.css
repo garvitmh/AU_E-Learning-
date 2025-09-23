@@ -1,0 +1,82 @@
+  body {
+  margin: 0;
+  padding: 0;
+  background: rgb(12, 11, 11);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.id-card {
+  width: 320px;
+  background: #aa06eb;
+  border-radius: 10px;
+  box-shadow: 0 6px 20px rgba(235, 7, 7, 0.1);
+  overflow: hidden;
+  text-align: center;
+  padding-bottom: 1rem;
+}
+
+.card-header {
+  
+  background: #ef5113;
+  color: rgb(15, 7, 19);
+  padding: 1rem;
+  position: relative;
+}
+
+.card-header .logo {
+  width: 60px;
+  position: absolute;
+  top: 10px;
+  left: 10px;
+}
+
+.card-header h2 {
+  font-size: 1.1rem;
+  margin: 0;
+  padding-left: 80px;
+  line-height: 60px;
+}
+
+.photo-section {
+  margin-top: 1rem;
+}
+
+.student-photo {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  border: 3px solid #16111a;
+}
+
+.student-info {
+  margin-top: 1rem;
+  padding: 0 1rem;
+}
+
+.student-info h3 {
+  margin: 0.5rem 0;
+  color: #000000;
+}
+
+.student-info p {
+  margin: 4px 0;
+  font-size: 0.95rem;
+}
+
+.footer {
+  margin-top: 0.5rem;
+  padding: 0.5rem;
+  border-top: 1px solid #131010;
+  font-size: 0.35cm;
+  color: #111010;
+}
+
+.footer .qr img {
+  width: 220px;
+  height: 40px;
+} 
+

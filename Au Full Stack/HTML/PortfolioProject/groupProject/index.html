@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Join Coursiva as a Mentor</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+            color: #333;
+        }
+
+        .hero {
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .apply-section {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 2rem;
+            padding: 2rem;
+        }
+
+        .apply-section img {
+            max-width: 300px;
+            border-radius: 10px;
+        }
+
+        .apply-section .info {
+            max-width: 600px;
+        }
+
+        .apply-section .info ul {
+            list-style-type: disc;
+            margin-left: 20px;
+        }
+
+        .apply-section .info button {
+            background-color: #7b5aff;
+            color: white;
+            border: none;
+            padding: 0.7rem 1.2rem;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .video-section {
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .video-section video {
+            width: 80%;
+            max-width: 700px;
+            border: 5px solid #7b5aff;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .steps {
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .steps img {
+            max-width: 600px;
+            border-radius: 10px;
+        }
+
+        .subscribe {
+            background-color: #1a1a40;
+            color: white;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .subscribe input[type="email"] {
+            padding: 0.5rem;
+            width: 250px;
+            border-radius: 5px;
+            border: none;
+            margin-right: 1rem;
+        }
+
+        .subscribe button {
+            padding: 0.6rem 1rem;
+            background-color: #7b5aff;
+            border: none;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .btn {
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="hero">
+        <h1>Join Coursiva as a Mentor</h1>
+    </div>
+
+    <section class="apply-section">
+        <img src="./1.jpg" alt="Instructor" height="250px">
+        <div class="info">
+            <h2>Apply As Instructor</h2>
+            <p>Teaching is a vital and enjoyable career. The following steps provide a general breakdown of the
+                requirements for teachers:</p>
+            <ul>
+                <li>An undergraduate degree</li>
+                <li>Participate in supervised teaching</li>
+                <li>State teaching license</li>
+                <li>Pursue graduate studies</li>
+            </ul>
+
+            <button onclick="window.location.href='./signup.html'">Apply Now</button>
+
+            <form id="myForm" action="/submit" method="POST" style="display: none; margin-top: 10px;">
+                <input type="text" name="username" placeholder="Enter your name" required>
+                <button type="submit">Submit</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- 🎥 Video Section -->
+        <section class="video-section" align="center">
+            <h2>How to Apply to join as Instructor</h2>
+            <h2>Watch This Video</h2>
+            <video controls>
+                <source src="./New Class Teacher _ Types of Teacher _  Animated Stories _ Cartoon _ Moral Stories _ PunToon Kids.mp4" type="video/mp4" >
+                Your browser does not support the video tag.
+            </video>
+        </section>
+
+
+
+    <section class="subscribe">
+        <h2>Subscribe For Get Update Every New Courses</h2>
+        <p>20k+ students daily learn with Coursiva. Subscribe for new courses.</p>
+        <input type="email" placeholder="Enter your email">
+        <button>Subscribe</button>
+    </section>
+</body>
+
+<script src="apply.js"></script>
+</html>

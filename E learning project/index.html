@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Coursiva - Course Details</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <section class="course-container">
+    <div class="course-video">
+      <video id="mainVideo" width="100%" height="400" controls>
+        <source src="video1.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+      </video>
+      <h2 id="videoTitle">Maths - Introduction</h2>
+    </div>
+
+    <aside class="course-playlist">
+      <h3>Course Playlists</h3>
+      <ul>
+        <li class="active" data-video="video1.mp4" data-title="Intellectual property - Introduction">Intellectual property - Introduction (10:10)</li>
+        <li data-video="video2.mp4" data-title="Intellectual property - for Standard 3 Students | Episode 2">Intellectual property - Episode 2 (12:18)</li>
+        <li data-video="video3.mp4" data-title="Intellectual property - for Standard 3 Students | Episode 3">Intellectual property - Episode 3 (11:39)</li>
+        <li data-video="video4.mp4" data-title="Intellectual property - for Standard 3 Students | Episode 4">Intellectual property - Episode 4 (9:51)</li>
+        <li data-video="video5.mp4" data-title="Intellectual property - for Standard 3 Students | Episode 5">Intellectual property - Episode 5 (11:20)</li>
+        <li data-video="video6.mp4" data-title="Intellectual property - for Standard 3 Students | Episode 6">Intellectual property - Episode 6 (10:00)</li>
+      </ul>
+    </aside>
+  </section>
+
+  <script>
+    const items = document.querySelectorAll('.course-playlist ul li');
+    const video = document.getElementById('mainVideo');
+    const title = document.getElementById('videoTitle');
+
+    items.forEach(item => {
+      item.addEventListener('click', () => {
+        items.forEach(i => i.classList.remove('active'));
+        item.classList.add('active');
+        video.src = item.getAttribute('data-video');
+        title.textContent = item.getAttribute('data-title');
+        video.play();
+      });
+    });
+  </script>
+
+  <section class="course-details">
+    <div class="details-text">
+      <h3>Course Details</h3>
+      <p>
+        This Intellectual Property Rights (IPR) course introduces you to the fundamentals of patents, copyrights, trademarks, trade secrets, and industrial designs. 
+        You will learn how to protect your innovations, manage IP assets, and understand international IP laws. 
+        The course includes practical case studies to help learners connect theory with real-world application.
+      </p>
+
+      <h3>Certification</h3>
+      <p>
+        Upon successful completion of this course, you will receive a verified certificate 
+        from Coursiva, demonstrating your knowledge of Intellectual Property Rights. 
+        This certificate can be shared on LinkedIn and with potential employers.
+      </p>
+
+      <h3>Who this course is for</h3>
+      <ul>
+        <li>Students in law, business, or engineering who want to understand IP basics.</li>
+        <li>Entrepreneurs and startups looking to protect their ideas and innovations.</li>
+        <li>Professionals in R&D, design, or product management roles.</li>
+        <li>Anyone interested in learning about global IP rights and enforcement.</li>
+      </ul>
+
+      <h3>What you'll learn in this course:</h3>
+      <ul style="list-style-type: disc;">
+        <li>Introduction to Intellectual Property Rights and their importance.</li>
+        <li>Patents: filing, duration, and case studies of patent disputes.</li>
+        <li>Trademarks and branding strategies for businesses.</li>
+        <li>Copyrights in creative industries: music, films, books, and software.</li>
+        <li>Trade secrets and industrial designs.</li>
+        <li>International IP laws: WIPO, TRIPS Agreement, and regional differences.</li>
+      </ul>
+      </div>
+
+    <div class="details-box">
+      <p><b>Price:</b> $49.00</p>
+      <p><b>Instructor:</b> Stan Muller</p>
+      <p><b>Ratings:</b> ⭐⭐⭐⭐⭐</p>
+      <p><b>Duration:</b> 60 minutes</p>
+      <p><b>Lessons:</b> 6</p>
+      <p><b>Quizzes:</b> 5</p>
+      <p><b>Certificate:</b> Yes</p>
+      <p><b>Language:</b> English</p>
+      <p><b>Access:</b> Lifetime</p>
+      <button class="btn">Purchase Course</button>
+    </div>
+  </section>
+
+  <section class="similar-courses">
+    <h3>Similar Courses</h3>
+    <div class="course-list">
+      <div class="course-card">
+        <a target="_blank" href="https://www.storytel.com/in/books/the-three-musketeers-1902416">
+          <img src="three masketeers4.jpg" alt="teacher img" height="50" width="50">
+        </a>
+        The Three Musketeers - $40.00 ⭐⭐⭐⭐⭐</div>
+      <div class="course-card">
+         <a target="_blank" href="https://www.amazon.in/Three-Musketeers-Alexandre-Dumas-ebook/dp/B00F5W7S7G">
+          <img src="three masketeers 2.jpg" alt="three masketeers" height="50" width="50">
+        The Three Musketeers - $40.00 ⭐⭐⭐⭐⭐</div>
+      <div class="course-card">
+         <a target="_blank" href="https://www.imdb.com/title/tt1509767/">
+          <img src="three masketeers 3.jpg" alt="three masketeers" height="50" width="50">
+        The Three Musketeers - $40.00 ⭐⭐⭐⭐⭐</div>
+      <div class="course-card">
+         <a target="_blank" href="https://atlanticbooks.com/products/the-three-musketeers-alexandre-dumas">
+          <img src="three masketeers1.jpg" alt="three masketeers" height="50" width="50">
+        The Three Musketeers - $40.00 ⭐⭐⭐⭐⭐</div>
+    </div>
+  </section>
+
+  <section class="subscribe">
+    <h3>Subscribe For Get Update Every New Courses</h3>
+    <p>20k+ students daily learn with Coursiva. Subscribe for new courses.</p>
+    <input type="email" placeholder="Enter your email">
+    <button class="btn">Subscribe</button>
+  </section>
+
+  <footer>
+    <p>&copy; 2026 Coursiva.io | All Rights Reserved</p>
+  </footer>
+
+</body>
+</html>
+
+

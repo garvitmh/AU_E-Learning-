@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Coursiva - Online Courses</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <div class="logo">Coursiva</div>
+    <nav> 
+      <ul>
+        <li>Shop</li>
+        <li>For Kindergarten</li>
+        <li>For High School</li>
+        <li>For College</li>
+        <li>Courses</li>
+      </ul>
+    </nav>
+    <div class="icons">
+      <div class="cart-dropdown">
+        <button class="cart-btn" aria-label="Cart">
+          <span class="cart-icon">
+            <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect width="32" height="32" rx="16" fill="#7c3aed"/>
+              <path d="M10 12h12l-1.5 8.5a2 2 0 0 1-2 1.5h-5a2 2 0 0 1-2-1.5L10 12z" fill="#fff"/>
+              <circle cx="13.5" cy="24" r="1.2" fill="#7c3aed"/>
+              <circle cx="18.5" cy="24" r="1.2" fill="#7c3aed"/>
+            </svg>
+            <span class="cart-badge" id="cart-badge">2</span>
+          </span>
+        </button>
+        <div class="cart-menu" id="cart-menu">
+          <div class="cart-title">My Cart</div>
+          <ul class="cart-items">
+            <li class="cart-item">
+              <span class="cart-item-name">Mathematics 101</span>
+              <span class="cart-item-remove" title="Remove">&times;</span>
+            </li>
+            <li class="cart-item">
+              <span class="cart-item-name">Science Basics</span>
+              <span class="cart-item-remove" title="Remove">&times;</span>
+            </li>
+          </ul>
+          <div class="cart-actions">
+            <button class="cart-view-btn">View Cart</button>
+            <button class="cart-checkout-btn">Checkout</button>
+          </div>
+        </div>
+      </div>
+      <div class="profile-dropdown">
+        <button class="profile-btn" aria-label="Profile">
+          <span class="profile-avatar">
+            <svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="18" cy="18" r="18" fill="#7c3aed"/>
+              <circle cx="18" cy="14" r="7" fill="#fff"/>
+              <ellipse cx="18" cy="28" rx="10" ry="6" fill="#fff"/>
+            </svg>
+          </span>
+        </button>
+        <div class="profile-menu">
+          <div class="profile-info">
+            <span class="profile-avatar-small">
+              <svg width="28" height="28" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="18" cy="18" r="18" fill="#7c3aed"/>
+                <circle cx="18" cy="14" r="7" fill="#fff"/>
+                <ellipse cx="18" cy="28" rx="10" ry="6" fill="#fff"/>
+              </svg>
+            </span>
+            <div>
+              <div class="profile-name">Student Name</div>
+              <div class="profile-email">student@email.com</div>
+            </div>
+          </div>
+          <ul>
+            <li><a href="#">My Profile</a></li>
+            <li><a href="#">Settings</a></li>
+            <li><a href="#">Logout</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="hero-text">
+      <div class="tagline">Never Stop Learning</div>
+      <h1>Grow up your skills by online courses with Coursiva</h1>
+      <p>Coursiva is a global training provider that offers high-quality video, audio, and live classes for every learner.</p>
+
+      <div class="search-box">
+        <select>
+          <option>Kindergarten</option>
+          <option>High School</option>
+          <option>College</option>
+        </select>
+        <input type="text" placeholder="Search Course">
+        <button onclick="searchCourse()">Search</button>
+      </div>
+    </div>
+
+    <div class="hero-img">
+  <div class="image-bg"></div> <!-- background box -->
+  <img src="./student.png" alt="Student">
+  <div class="float-icon icon1">📘</div>
+  <div class="float-icon icon2">⭐</div>
+  <div class="float-icon icon3">🎓</div>
+  <div class="float-icon icon4">💡</div>
+</div>
+
+  </section>
+  <section class="usp">
+    <h2>High quality video, audio & live classes</h2>
+    <p>Learn with high-definition video and interactive sessions designed for you.</p>
+    <button>Visit Courses</button>
+  </section>
+
+  <!-- Interactive Class Types Section -->
+  <section class="class-types">
+    <div class="class-types-main">
+      <div class="class-video-card">
+        <img src="https://images.unsplash.com/photo-1513258496099-48168024aec0?auto=format&fit=crop&w=800&q=80" alt="Teacher at whiteboard" class="main-class-img">
+        <img src="https://images.unsplash.com/photo-1503676382389-4809596d5290?auto=format&fit=crop&w=200&q=80" alt="Student raising hand" class="student-thumb">
+        <div class="call-controls">
+          <span class="call-btn audio"><svg width="22" height="22" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="11" cy="11" r="11" fill="#ff6b81"/><path d="M7 11c0 2.21 1.79 4 4 4s4-1.79 4-4" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg></span>
+          <span class="call-btn video"><svg width="22" height="22" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="11" cy="11" r="11" fill="#7c3aed"/><rect x="7" y="9" width="8" height="4" rx="1" fill="#fff"/></svg></span>
+        </div>
+      </div>
+    </div>
+    <div class="class-type-options">
+      <div class="class-type-option">
+        <span class="icon audio"><svg width="24" height="24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="12" fill="#ff6b81"/><path d="M8 12c0 2.21 1.79 4 4 4s4-1.79 4-4" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg></span>
+        <span>Audio Classes</span>
+      </div>
+      <div class="class-type-option">
+        <span class="icon live"><svg width="24" height="24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="12" fill="#7c3aed"/><rect x="8" y="10" width="8" height="4" rx="1" fill="#fff"/></svg></span>
+        <span>Live Classes</span>
+      </div>
+      <div class="class-type-option">
+        <span class="icon recorded"><svg width="24" height="24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="12" fill="#22c55e"/><rect x="9" y="9" width="6" height="6" rx="1" fill="#fff"/></svg></span>
+        <span>Recorded Class</span>
+      </div>
+    </div>
+  </section>
+  </section>
+
+  <!-- Qualified Lessons Section -->
+  <section class="qualified-lessons">
+    <h2>Qualified lessons for students</h2>
+    <p class="lessons-desc">A lesson or class is a structured period of time where learning is intended to occur. It involves one or more students being taught by a teacher or instructor.</p>
+    <div class="lesson-tabs">
+      <button class="tab active" data-tab="highschool">High School</button>
+      <button class="tab" data-tab="kindergarten">Kindergarten</button>
+      <button class="tab" data-tab="college">College</button>
+    </div>
+    <div class="lesson-cards">
+      <!-- High School Standards -->
+      <div class="lesson-card" data-group="highschool"><div class="circle c1">1</div><h3>Standard One</h3><p>Standard 1 is foundation Standard that reflects 7 important concepts...</p><button class="details-btn">Class Details</button></div>
+      <div class="lesson-card" data-group="highschool"><div class="circle c2">2</div><h3>Standard Two</h3><p>Standard 2 builds on the foundations of Standard 1 and includes requirements...</p><button class="details-btn">Class Details</button></div>
+      <div class="lesson-card" data-group="highschool"><div class="circle c3">3</div><h3>Standard Three</h3><p>Standard 3 of the Aged Care Quality Standards applies to all services delivering personal...</p><button class="details-btn">Class Details</button></div>
+      <div class="lesson-card" data-group="highschool"><div class="circle c4">4</div><h3>Standard Four</h3><p>Standard 4 of the Aged Care Quality Standards focuses on services and supports...</p><button class="details-btn">Class Details</button></div>
+      <div class="lesson-card" data-group="highschool"><div class="circle c5">5</div><h3>Standard Five</h3><p>Standard 5 Learning Resources. Learning Resources ensure that the school has the...</p><button class="details-btn">Class Details</button></div>
+      <div class="lesson-card" data-group="highschool"><div class="circle c6">6</div><h3>Standard Six</h3><p>Standard 6 requires an organization to have a system to resolve complaints...</p><button class="details-btn">Class Details</button></div>
+      <div class="lesson-card" data-group="highschool"><div class="circle c7">7</div><h3>Standard Seven</h3><p>Standard 7 Blood Management mandates that relevant health service organizations...</p><button class="details-btn">Class Details</button></div>
+      <div class="lesson-card" data-group="highschool"><div class="circle c8">8</div><h3>Standard Eight</h3><p>Standard 8 Course from NCERT Syllabus helps students to understand...</p><button class="details-btn">Class Details</button></div>
+      <!-- Kindergarten Example -->
+      <div class="lesson-card" data-group="kindergarten" style="display:none"><div class="circle c1">A</div><h3>KG One</h3><p>Introduction to letters, numbers, and basic shapes for young learners.</p><button class="details-btn">Class Details</button></div>
+      <div class="lesson-card" data-group="kindergarten" style="display:none"><div class="circle c2">B</div><h3>KG Two</h3><p>Building on basics: colors, animals, and simple words for kids.</p><button class="details-btn">Class Details</button></div>
+      <!-- College Example -->
+      <div class="lesson-card" data-group="college" style="display:none"><div class="circle c3">I</div><h3>First Year</h3><p>Core foundation courses for college freshmen in various disciplines.</p><button class="details-btn">Class Details</button></div>
+      <div class="lesson-card" data-group="college" style="display:none"><div class="circle c4">II</div><h3>Second Year</h3><p>Advanced topics and electives for college sophomores.</p><button class="details-btn">Class Details</button></div>
+    </div>
+    <div class="more-classes-btn-wrap">
+      <button class="more-classes-btn">Visit More Classes</button>
+    </div>
+  </section>
+
+  <!-- Promo and Mentor Call-to-Action Section -->
+  <section class="promo-mentor-section">
+    <div class="promo-card">
+      <div class="promo-left">
+        <span class="promo-level">College Level</span>
+        <h2>Don't waste time. <br>Develop your skills.</h2>
+        <p>High-definition video is video of higher resolution and quality than standard-definition. While there is no standardized meaning for high-definition, generally any video.</p>
+        <button class="promo-btn">Registration Now</button>
+      </div>
+      <div class="promo-right">
+        <img src="https://images.unsplash.com/photo-1513258496099-48168024aec0?auto=format&fit=crop&w=600&q=80" alt="Student at desk" class="promo-img-main">
+        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg" alt="HTML5" class="promo-icon promo-icon-html">
+        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/flutter/flutter-original.svg" alt="Flutter" class="promo-icon promo-icon-flutter">
+      </div>
+    </div>
+  </section>
+  <script src="script.js"></script>
+</body>
+</html>

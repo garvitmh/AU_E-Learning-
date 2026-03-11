@@ -1,0 +1,138 @@
+import { useContext } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { useAuth, useCart } from '../../hooks';
+import { ThemeContext, THEMES } from '../../context/ThemeContext';
+import { BookOpen, Layers, LibraryBig, Presentation, Palette, ShoppingCart, User, LogOut, Settings, LayoutDashboard, Shield, BookMarked, Menu } from 'lucide-react';
+
+export default function Navbar() {
+  const { user, logout } = useAuth();
+  const { cart } = useCart();
+  const navigate = useNavigate();
+  const themeCtx = useContext(ThemeContext);
+
+  const handleLogout = () => {
+    logout();
+    navigate('/');
+  };
+
+
+
+  return (
+    <div className="navbar bg-base-100/80 backdrop-blur-md shadow-sm border-b border-base-200 sticky top-0 z-50 px-4 lg:px-8">
+      <div className="navbar-start">
+        <div className="dropdown">
+          <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden p-2">
+            <Menu className="w-6 h-6" />
+          </div>
+          <ul tabIndex={0} className="menu menu-md dropdown-content mt-3 z-[1] p-3 shadow-xl bg-base-100/90 backdrop-blur-lg rounded-box w-64 gap-1 border border-base-200">
+            <li><Link to="/books" className="py-3"><BookOpen className="w-5 h-5 mr-3"/> Books</Link></li>
+            <li>
+              <a className="py-3"><Layers className="w-5 h-5 mr-3"/> Categories</a>
+              <ul className="p-2 gap-1">
+                <li><Link to="/courses?cat=kindergarten" className="py-2">🧸 Kindergarten</Link></li>
+                <li><Link to="/courses?cat=highschool" className="py-2">📐 High School</Link></li>
+                <li><Link to="/courses?cat=college" className="py-2">🎓 College</Link></li>
+              </ul>
+            </li>
+            <li><Link to="/courses" className="py-3"><LibraryBig className="w-5 h-5 mr-3"/> All Courses</Link></li>
+          </ul>
+        </div>
+        <Link to="/" className="btn btn-ghost text-xl font-bold flex gap-2 items-center">
+          <img src="/photo/e-learning.png" alt="Logo" className="h-8" onError={(e) => { e.currentTarget.style.display = 'none'; }} />
+          <span className="hidden sm:inline">Coursiva</span>
+        </Link>
+      </div>
+      
+      <div className="navbar-center hidden lg:flex">
+        <ul className="menu menu-horizontal px-1 font-medium gap-2 text-base items-center">
+          <li><Link to="/books" className="hover:text-primary transition-colors flex items-center gap-2 px-4"><BookOpen className="w-5 h-5"/> Books</Link></li>
+          <li>
+            <details>
+              <summary className="hover:text-primary transition-colors flex items-center gap-2 px-4"><Layers className="w-5 h-5"/> Categories</summary>
+              <ul className="p-3 shadow-xl bg-base-100/90 backdrop-blur-lg rounded-box w-56 z-50 gap-1 border border-base-200 mt-4">
+                <li><Link to="/courses?cat=kindergarten" className="py-2">🧸 Kindergarten</Link></li>
+                <li><Link to="/courses?cat=highschool" className="py-2">📐 High School</Link></li>
+                <li><Link to="/courses?cat=college" className="py-2">🎓 College</Link></li>
+              </ul>
+            </details>
+          </li>
+          <li><Link to="/courses" className="hover:text-primary transition-colors flex items-center gap-2 px-4"><LibraryBig className="w-5 h-5"/> Courses</Link></li>
+          <li><Link to="/mentor" className="text-primary font-bold hover:bg-primary/10 rounded-full px-5 py-2 transition-colors flex items-center gap-2"><Presentation className="w-5 h-5"/> Become a Mentor</Link></li>
+        </ul>
+      </div>
+      
+      <div className="navbar-end gap-4">
+        {/* Theme Controller */}
+        <div className="dropdown dropdown-end">
+          <div tabIndex={0} role="button" className="btn btn-ghost btn-circle" title="Change Theme">
+            <Palette className="w-6 h-6 text-base-content/80" />
+          </div>
+          <ul tabIndex={0} className="dropdown-content z-[1] menu p-3 shadow-xl bg-base-100/90 backdrop-blur-lg rounded-box w-56 gap-1 border border-base-200 mt-4">
+            <li className="menu-title px-4 py-2 text-xs uppercase tracking-wider font-bold opacity-60">Themes</li>
+            {THEMES.map(theme => (
+              <li key={theme.value}>
+                <button 
+                  className={`py-3 ${themeCtx?.theme === theme.value ? 'bg-primary/10 text-primary font-bold' : ''}`}
+                  onClick={() => {
+                    themeCtx?.setTheme(theme.value as any);
+                    (document.activeElement as HTMLElement)?.blur();
+                  }}
+                >
+                  <span className="text-lg mr-2">{theme.emoji}</span> {theme.label.replace(theme.emoji, '').trim()}
+                </button>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        {/* Cart */}
+        <Link to="/cart" className="btn btn-ghost btn-circle relative">
+          <ShoppingCart className="w-6 h-6 text-base-content/80" />
+          {cart.totalItems > 0 && (
+            <span className="badge badge-error badge-sm absolute top-0 right-0 font-bold border-2 border-base-100 shadow-sm">
+              {cart.totalItems}
+            </span>
+          )}
+        </Link>
+
+        {/* Account */}
+        <div className="dropdown dropdown-end">
+          <div tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar placeholder">
+            <div className="bg-primary/10 text-primary rounded-full w-10 flex items-center justify-center border-2 border-primary/20 hover:border-primary/50 transition-colors">
+              {user ? (
+                <span className="font-bold text-lg">{user.username?.charAt(0).toUpperCase()}</span>
+              ) : (
+                <User className="w-5 h-5 text-base-content/70" />
+              )}
+            </div>
+          </div>
+          <ul tabIndex={0} className="mt-4 z-[1] p-3 shadow-xl menu menu-md dropdown-content bg-base-100/90 backdrop-blur-lg rounded-box w-64 gap-1 border border-base-200">
+            {user ? (
+              <>
+                <li className="menu-title px-4 py-2">
+                  <span className="block text-xs opacity-70 uppercase tracking-wider font-bold mb-1">Signed in as</span>
+                  <strong className="block truncate text-base-content text-sm">{user.email}</strong>
+                  <span className={`badge badge-sm mt-2 font-bold ${user.role === 'admin' ? 'badge-error' : user.role === 'mentor' ? 'badge-secondary' : 'badge-primary'}`}>
+                    {user.role}
+                  </span>
+                </li>
+                <div className="divider my-1 opacity-30"></div>
+                {user.role === 'admin' && <li><Link to="/admin" className="py-3"><Shield className="w-5 h-5 mr-3 text-error"/> Admin Dashboard</Link></li>}
+                {(user.role === 'mentor' || user.role === 'admin') && <li><Link to="/mentor-dashboard" className="py-3"><LayoutDashboard className="w-5 h-5 mr-3 text-secondary"/> Mentor Dashboard</Link></li>}
+                <li><Link to="/dashboard" className="py-3"><BookMarked className="w-5 h-5 mr-3 text-primary"/> My Learning</Link></li>
+                <li><Link to="/profile" className="py-3"><Settings className="w-5 h-5 mr-3 base-content/70"/> Profile Settings</Link></li>
+                <div className="divider my-1 opacity-30"></div>
+                <li><button className="text-error font-medium hover:bg-error/10 py-3" onClick={handleLogout}><LogOut className="w-5 h-5 mr-3"/> Sign Out</button></li>
+              </>
+            ) : (
+              <>
+                <li><Link to="/login" className="py-3 font-medium"><User className="w-5 h-5 mr-3"/> Login</Link></li>
+                <li><Link to="/signup" className="text-primary font-bold py-3"><User className="w-5 h-5 mr-3"/> Sign Up Free</Link></li>
+              </>
+            )}
+          </ul>
+        </div>
+      </div>
+    </div>
+  );
+}

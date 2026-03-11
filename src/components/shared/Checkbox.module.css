@@ -1,0 +1,123 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  margin-bottom: var(--space-4);
+}
+
+.checkboxWrapper {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  cursor: pointer;
+}
+
+.checkbox {
+  appearance: none;
+  width: 0;
+  height: 0;
+  opacity: 0;
+  cursor: pointer;
+  margin: 0;
+}
+
+.label {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  cursor: pointer;
+  user-select: none;
+  font-size: var(--text-base);
+  color: var(--text-dark);
+}
+
+.checkmark {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border: 2px solid var(--border-color);
+  border-radius: 4px;
+  background-color: white;
+  transition: all var(--transition-duration) var(--transition-timing);
+  flex-shrink: 0;
+}
+
+.checkbox:hover:not(:disabled) + .label .checkmark {
+  border-color: var(--primary-purple);
+  background-color: rgba(106, 108, 255, 0.05);
+}
+
+.checkbox:checked + .label .checkmark {
+  background-color: var(--primary-purple);
+  border-color: var(--primary-purple);
+}
+
+.checkbox:checked + .label .checkmark::after {
+  content: '✓';
+  color: white;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.checkbox:focus-visible + .label .checkmark {
+  outline: 2px solid var(--primary-purple);
+  outline-offset: 2px;
+}
+
+.checkbox:disabled + .label {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.error {
+  border-color: #DC2626;
+}
+
+.errorText {
+  font-size: var(--text-sm);
+  color: #DC2626;
+  margin: 0;
+}
+
+.helperText {
+  font-size: var(--text-sm);
+  color: var(--text-light);
+  margin: 0;
+}
+
+/* Checkbox Group */
+.groupContainer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.groupLabel {
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--text-dark);
+}
+
+.optionsWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.optionsWrapper > .container {
+  margin-bottom: 0;
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+  .label {
+    font-size: var(--text-sm);
+  }
+
+  .checkmark {
+    width: 18px;
+    height: 18px;
+  }
+}

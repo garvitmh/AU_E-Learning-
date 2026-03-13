@@ -103,9 +103,9 @@ export default function Home() {
             
             {/* Search Form */}
             <form onSubmit={handleSearch} className="w-full max-w-lg">
-              <div className="join w-full shadow-lg rounded-full">
+              <div className="flex flex-col sm:flex-row shadow-lg rounded-2xl sm:rounded-full overflow-hidden border border-base-300 bg-base-100">
                 <select 
-                  className="select select-bordered join-item w-1/3 focus:outline-none"
+                  className="select select-ghost w-full sm:w-1/3 focus:outline-none border-b sm:border-b-0 sm:border-r border-base-300 rounded-none"
                   value={category}
                   onChange={(e) => setCategory(e.target.value)}
                 >
@@ -118,12 +118,12 @@ export default function Home() {
                   <input 
                     type="text" 
                     placeholder="Search any topic..." 
-                    className="input input-bordered join-item w-full focus:outline-none focus:ring-0" 
+                    className="input input-ghost w-full focus:outline-none focus:ring-0 rounded-none" 
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                   />
                 </div>
-                <button type="submit" className="btn btn-primary join-item px-6">Search</button>
+                <button type="submit" className="btn btn-primary rounded-none sm:rounded-none px-8">Search</button>
               </div>
             </form>
 
@@ -221,7 +221,7 @@ export default function Home() {
         </div>
         
         {trendingBooks.length > 0 && (
-          <div style={{ height: '600px', position: 'relative' }}>
+          <div className="h-[400px] md:h-[600px] relative overflow-hidden">
             <InfiniteMenu 
               items={trendingBooks.map(book => ({
                 image: book.image || `https://placehold.co/400x600/6419e6/fff?text=${encodeURIComponent(book.title)}`,
@@ -229,7 +229,7 @@ export default function Home() {
                 title: book.title,
                 description: book.author
               }))}
-              scale={1}
+              scale={0.8}
             />
           </div>
         )}

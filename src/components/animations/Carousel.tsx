@@ -9,27 +9,37 @@ export const Carousel = ({ children }: { children: ReactNode[] }) => {
   const prev = () => setCurrentIndex((prevIndex) => (prevIndex - 1 < 0 ? children.length - 1 : prevIndex - 1));
 
   return (
-    <div className="relative w-full py-10"> {/* removed overflow-hidden here to allow glow effects */}
-      <div className="flex justify-center items-center gap-4">
-        <button onClick={prev} className="btn btn-circle btn-primary btn-sm z-10 shadow-lg">
-          <ChevronLeft className="w-5 h-5" />
+    <div className="relative w-full py-6 md:py-10 group">
+      <div className="flex justify-center items-center gap-2 md:gap-4 h-full">
+        <button 
+          onClick={prev} 
+          className="btn btn-circle btn-primary btn-sm z-20 shadow-lg opacity-0 group-hover:opacity-100 md:opacity-100 transition-opacity"
+        >
+          <ChevronLeft className="w-4 h-4 md:w-5 md:h-5" />
         </button>
-        <div className="w-full max-w-sm sm:max-w-md md:max-w-lg lg:max-w-xl xl:max-w-2xl relative flex justify-center items-center" style={{ minHeight: '520px' }}>
+        
+        <div className="w-full max-w-sm sm:max-w-md md:max-w-lg lg:max-w-xl xl:max-w-2xl relative flex justify-center items-center min-h-[480px] sm:min-h-[520px]">
           <AnimatePresence mode="wait">
             <motion.div
               key={currentIndex}
-              initial={{ opacity: 0, x: 100 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -100 }}
-              transition={{ duration: 0.3 }}
+              initial={{ opacity: 0, x: 20, scale: 0.95 }}
+              animate={{ opacity: 1, x: 0, scale: 1 }}
+              exit={{ opacity: 0, x: -20, scale: 0.95 }}
+              transition={{ duration: 0.4, ease: "easeOut" }}
               className="absolute w-full h-full flex justify-center items-center p-2"
             >
-              {children[currentIndex]}
+              <div className="w-full h-full transform transition-transform duration-500">
+                {children[currentIndex]}
+              </div>
             </motion.div>
           </AnimatePresence>
         </div>
-        <button onClick={next} className="btn btn-circle btn-primary btn-sm z-10 shadow-lg">
-          <ChevronRight className="w-5 h-5" />
+
+        <button 
+          onClick={next} 
+          className="btn btn-circle btn-primary btn-sm z-20 shadow-lg opacity-0 group-hover:opacity-100 md:opacity-100 transition-opacity"
+        >
+          <ChevronRight className="w-4 h-4 md:w-5 md:h-5" />
         </button>
       </div>
       <div className="flex justify-center mt-6 gap-2">

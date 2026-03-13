@@ -126,26 +126,28 @@ export default function Courses() {
 
       <div className="max-w-[1400px] mx-auto px-4 py-12">
         {/* Category Tabs */}
-        <div className="flex flex-wrap gap-2 mb-10 justify-center">
-          {categories.map((cat) => (
-            <button
-              key={cat.key}
-              onClick={() => setSelectedCategory(cat.key)}
-              className={`btn btn-sm rounded-full gap-2 transition-all duration-300 ${
-                selectedCategory === cat.key
-                  ? 'btn-primary shadow-lg scale-105 px-6'
-                  : 'btn-ghost bg-base-200 border border-base-300 hover:border-primary hover:bg-base-300'
-              }`}
-            >
-              <span className="text-lg">
-                {(() => {
-                  const Icon = CATEGORY_ICONS[cat.key];
-                  return Icon ? <Icon className="w-5 h-5" /> : <BookOpen className="w-5 h-5" />;
-                })()}
-              </span>
-              <span className="font-semibold">{cat.label}</span>
-            </button>
-          ))}
+        <div className="w-full overflow-x-auto pb-4 scrollbar-hide mb-6">
+          <div className="flex gap-2 justify-start md:justify-center flex-nowrap min-w-max px-2">
+            {categories.map((cat) => (
+              <button
+                key={cat.key}
+                onClick={() => setSelectedCategory(cat.key)}
+                className={`btn btn-sm rounded-full gap-2 transition-all duration-300 flex-shrink-0 ${
+                  selectedCategory === cat.key
+                    ? 'btn-primary shadow-lg scale-105 px-6'
+                    : 'btn-ghost bg-base-200 border border-base-300 hover:border-primary hover:bg-base-300'
+                }`}
+              >
+                <span className="text-lg">
+                  {(() => {
+                    const Icon = CATEGORY_ICONS[cat.key];
+                    return Icon ? <Icon className="w-5 h-5" /> : <BookOpen className="w-5 h-5" />;
+                  })()}
+                </span>
+                <span className="font-semibold">{cat.label}</span>
+              </button>
+            ))}
+          </div>
         </div>
 
         {/* Results info */}

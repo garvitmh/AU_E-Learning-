@@ -84,27 +84,29 @@ export default function Books() {
 
       {/* Category Filter & Search */}
       <div className="bg-base-100 border-b border-base-200 py-6 px-4 sticky top-[68px] z-40 shadow-sm flex flex-col md:flex-row items-center justify-between gap-6 max-w-7xl mx-auto w-full">
-        <div className="flex gap-2 flex-wrap">
-          {categories.map(cat => (
-            <button
-              key={cat}
-              onClick={() => setSelectedCategory(cat)}
-              className={`btn btn-sm rounded-full transition-all duration-300 ${
-                selectedCategory === cat 
-                  ? 'btn-primary shadow-lg scale-105' 
-                  : 'btn-ghost bg-base-200 border border-base-300 hover:border-primary'
-              }`}
-            >
-              <span className="text-lg">
-                {(() => {
-                  if (cat === 'all') return <BookOpen className="w-5 h-5"/>;
-                  const Icon = CATEGORY_ICONS[cat];
-                  return Icon ? <Icon className="w-5 h-5"/> : <BookOpen className="w-5 h-5"/>;
-                })()}
-              </span>
-              <span className="font-semibold capitalize">{cat === 'all' ? 'All Books' : cat}</span>
-            </button>
-          ))}
+        <div className="flex gap-2 w-full md:w-auto overflow-x-auto pb-2 scrollbar-hide">
+          <div className="flex gap-2 flex-nowrap">
+            {categories.map(cat => (
+              <button
+                key={cat}
+                onClick={() => setSelectedCategory(cat)}
+                className={`btn btn-sm rounded-full transition-all duration-300 flex-shrink-0 ${
+                  selectedCategory === cat 
+                    ? 'btn-primary shadow-lg scale-105' 
+                    : 'btn-ghost bg-base-200 border border-base-300 hover:border-primary'
+                }`}
+              >
+                <span className="text-lg">
+                  {(() => {
+                    if (cat === 'all') return <BookOpen className="w-5 h-5"/>;
+                    const Icon = CATEGORY_ICONS[cat];
+                    return Icon ? <Icon className="w-5 h-5"/> : <BookOpen className="w-5 h-5"/>;
+                  })()}
+                </span>
+                <span className="font-semibold capitalize">{cat === 'all' ? 'All Books' : cat}</span>
+              </button>
+            ))}
+          </div>
         </div>
         <div className="w-full md:w-auto relative">
            <input 

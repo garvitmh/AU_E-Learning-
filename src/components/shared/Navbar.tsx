@@ -2,7 +2,8 @@ import { useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth, useCart } from '../../hooks';
 import { ThemeContext, THEMES } from '../../context/ThemeContext';
-import { BookOpen, Layers, LibraryBig, Presentation, Palette, ShoppingCart, User, LogOut, Settings, LayoutDashboard, Shield, BookMarked, Menu, Home, Baby, GraduationCap, School } from 'lucide-react';
+import { BookOpen, Layers, LibraryBig, Presentation, Palette, ShoppingCart, User, LogOut, Settings, LayoutDashboard, Shield, BookMarked, Home, Baby, GraduationCap, School } from 'lucide-react';
+import { StaggeredMenu } from '../animations/StaggeredMenu';
 
 export default function Navbar() {
   const { user, logout } = useAuth();
@@ -15,31 +16,36 @@ export default function Navbar() {
     navigate('/');
   };
 
+  const menuItems = [
+    { label: 'Home', ariaLabel: 'Go to home', link: '/' },
+    { label: 'Books', ariaLabel: 'Browse books', link: '/books' },
+    { label: 'Courses', ariaLabel: 'All courses', link: '/courses' },
+    { label: 'Mentor', ariaLabel: 'Become a mentor', link: '/mentor' },
+    ...(user ? [{ label: 'Dashboard', ariaLabel: 'User dashboard', link: '/dashboard' }] : [
+      { label: 'Login', ariaLabel: 'Login to account', link: '/login' },
+      { label: 'Sign Up', ariaLabel: 'Create new account', link: '/signup' }
+    ])
+  ];
 
+  const socialItems = [
+    { label: 'Instagram', link: 'https://instagram.com' },
+    { label: 'Twitter', link: 'https://twitter.com' },
+    { label: 'LinkedIn', link: 'https://linkedin.com' }
+  ];
 
   return (
-    <div className="navbar bg-base-100/80 backdrop-blur-md shadow-sm border-b border-base-200 sticky top-0 z-50 px-4 lg:px-8">
+    <div className="navbar bg-base-100/80 backdrop-blur-md shadow-sm border-b border-base-200 sticky top-0 z-[100] px-4 lg:px-8">
       <div className="navbar-start">
-        <div className="dropdown">
-          <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden p-2">
-            <Menu className="w-6 h-6" />
-          </div>
-          <ul tabIndex={0} className="menu menu-md dropdown-content mt-3 z-[1] p-3 shadow-xl bg-base-100/90 backdrop-blur-lg rounded-box w-64 gap-1 border border-base-200">
-            <li><Link to="/" className="py-3"><Home className="w-5 h-5 mr-3"/> Home</Link></li>
-            {user && <li><Link to="/dashboard" className="py-3"><BookMarked className="w-5 h-5 mr-3"/> My Courses</Link></li>}
-            <li><Link to="/books" className="py-3"><BookOpen className="w-5 h-5 mr-3"/> Books</Link></li>
-            <li>
-              <a className="py-3"><Layers className="w-5 h-5 mr-3"/> Categories</a>
-              <ul className="p-2 gap-1">
-                <li><Link to="/courses?cat=kindergarten" className="py-2"><Baby className="w-4 h-4 mr-2"/> Kindergarten</Link></li>
-                <li><Link to="/courses?cat=highschool" className="py-2"><School className="w-4 h-4 mr-2"/> High School</Link></li>
-                <li><Link to="/courses?cat=college" className="py-2"><GraduationCap className="w-4 h-4 mr-2"/> College</Link></li>
-              </ul>
-            </li>
-            <li><Link to="/courses" className="py-3"><LibraryBig className="w-5 h-5 mr-3"/> All Courses</Link></li>
-          </ul>
+        <div className="lg:hidden">
+          <StaggeredMenu 
+            isFixed={true} 
+            items={menuItems} 
+            socialItems={socialItems}
+            accentColor="oklch(var(--p))"
+            colors={['oklch(var(--b2))', 'oklch(var(--b1))']}
+          />
         </div>
-        <Link to="/" className="btn btn-ghost text-xl font-bold flex gap-2 items-center">
+        <Link to="/" className="btn btn-ghost text-xl font-bold flex gap-2 items-center z-50">
           <img src="/photo/e-learning.png" alt="Logo" className="h-8" onError={(e) => { e.currentTarget.style.display = 'none'; }} />
           <span className="hidden sm:inline">Coursiva</span>
         </Link>

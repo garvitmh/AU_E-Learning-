@@ -5,6 +5,10 @@ import { SplitText } from '../components/animations/SplitText';
 import { AnimatedList } from '../components/animations/AnimatedList';
 import { formatCurrency } from '../utils/currencies';
 
+const API_URL = import.meta.env.VITE_API_URL
+  ? (import.meta.env.VITE_API_URL.endsWith('/api/v1') ? import.meta.env.VITE_API_URL : `${import.meta.env.VITE_API_URL}/api/v1`)
+  : '/api/v1';
+
 import { BookOpen, Search, Laptop, Briefcase, Microscope, Calculator, Palette, Globe, Car } from 'lucide-react';
 
 const CATEGORY_COLORS: Record<string, string> = {
@@ -34,7 +38,7 @@ export default function Books() {
 
   const fetchBooks = async () => {
     try {
-      const res = await fetch('/api/v1/books');
+      const res = await fetch(`${API_URL}/books`);
       const data = await res.json();
       if (data.success) setBooks(data.data);
     } catch (err) {

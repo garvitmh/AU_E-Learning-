@@ -4,6 +4,10 @@ import { useCart } from '../hooks/useCart';
 import { SplitText } from '../components/animations/SplitText';
 import { formatCurrency } from '../utils/currencies';
 
+const API_URL = import.meta.env.VITE_API_URL
+  ? (import.meta.env.VITE_API_URL.endsWith('/api/v1') ? import.meta.env.VITE_API_URL : `${import.meta.env.VITE_API_URL}/api/v1`)
+  : '/api/v1';
+
 import { BookOpen, BookX, Laptop, Briefcase, Microscope, Calculator, Palette, Globe, ShoppingCart, Truck, Undo2, Lock, PenTool, Flame } from 'lucide-react';
 
 const CATEGORY_ICONS: Record<string, any> = {
@@ -29,7 +33,7 @@ export default function BookDetail() {
 
   const fetchBook = async () => {
     try {
-      const res = await fetch(`/api/v1/books/${id}`);
+      const res = await fetch(`${API_URL}/books/${id}`);
       const data = await res.json();
       if (data.success) {
         setBook(data.data);

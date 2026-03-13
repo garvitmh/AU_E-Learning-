@@ -41,7 +41,11 @@ const courseSchema = new mongoose.Schema({
   videos: [{
     title: String,
     videoUrl: String,
-    duration: String
+    duration: String,
+    isTrial: {
+      type: Boolean,
+      default: false
+    }
   }],
   createdAt: {
     type: Date,

@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '../hooks/useAuth';
 import { useNavigate, Link } from 'react-router-dom';
-import { Card, CardHeader, CardBody, Button, Badge } from '../components/shared';
-import { GraduationCap, LayoutDashboard, Award, Settings, BookOpen, Clock, PlayCircle } from 'lucide-react';
+import { api } from '../services/api';
+import { Card, CardBody, Button, Badge } from '../components/shared';
+import { GraduationCap, Award, Settings, BookOpen, Clock, PlayCircle } from 'lucide-react';
 
 export default function StudentDashboard() {
   const { user, isAuthenticated } = useAuth();
@@ -10,44 +11,20 @@ export default function StudentDashboard() {
   const [activeTab, setActiveTab] = useState('learning');
   const [enrolledCourses, setEnrolledCourses] = useState<any[]>([]);
 
-  // Realistic Enterprise Mock Data
+  // Fetch Real Data from API
   useEffect(() => {
-    if (user) {
-      setTimeout(() => {
-        setEnrolledCourses([
-          { 
-            id: '1', 
-            title: 'Full-Stack React & Node.js', 
-            progress: 65, 
-            image: 'https://images.unsplash.com/photo-1633356122544-f134324a6cee?w=800&q=80', 
-            instructor: 'Marcus Johnson',
-            nextLesson: 'Building the Authentication API',
-            totalLessons: 42,
-            completedLessons: 27
-          },
-          { 
-            id: '2', 
-            title: 'Data Structures & Algorithms', 
-            progress: 12, 
-            image: 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=800&q=80', 
-            instructor: 'Dr. Sarah Chen',
-            nextLesson: 'Big O Notation In Depth',
-            totalLessons: 85,
-            completedLessons: 10
-          },
-          { 
-            id: '3', 
-            title: 'Advanced Web Design', 
-            progress: 100, 
-            image: 'https://images.unsplash.com/photo-1507721999472-8ed4421c4af2?w=800&q=80', 
-            instructor: 'Elena Rodriguez',
-            nextLesson: null,
-            totalLessons: 30,
-            completedLessons: 30
-          }
-        ]);
-      }, 600);
-    }
+    const fetchEnrolledCourses = async () => {
+      if (!user) return;
+      try {
+        const res = await api.student.getEnrolledCourses();
+        if (res.success) {
+          setEnrolledCourses(res.data);
+        }
+      } catch (err) {
+        console.error('Failed to fetch enrolled courses:', err);
+      }
+    };
+    fetchEnrolledCourses();
   }, [user]);
 
   useEffect(() => {
@@ -168,9 +145,11 @@ export default function StudentDashboard() {
                                   <span className="font-bold text-base-content/50 uppercase tracking-wider text-xs">Up Next:</span>
                                   <span className="font-semibold truncate max-w-[200px] md:max-w-none">{course.nextLesson}</span>
                                </div>
-                               <Button variant="primary" size="sm" className="shadow-sm pl-3 pr-4">
-                                  <PlayCircle className="w-4 h-4 mr-2"/> Resume
-                               </Button>
+                               <Link to={`/courses/${course.id}`}>
+                                 <Button variant="primary" size="sm" className="shadow-sm pl-3 pr-4">
+                                    <PlayCircle className="w-4 h-4 mr-2"/> Resume
+                                 </Button>
+                               </Link>
                              </div>
                           </div>
                         </div>

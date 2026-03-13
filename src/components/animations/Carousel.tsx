@@ -14,7 +14,7 @@ export const Carousel = ({ children }: { children: ReactNode[] }) => {
         <button onClick={prev} className="btn btn-circle btn-primary btn-sm z-10 shadow-lg">
           <ChevronLeft className="w-5 h-5" />
         </button>
-        <div className="w-full max-w-sm sm:max-w-md md:max-w-lg lg:max-w-xl xl:max-w-2xl relative flex justify-center items-center" style={{ minHeight: '400px' }}>
+        <div className="w-full max-w-sm sm:max-w-md md:max-w-lg lg:max-w-xl xl:max-w-2xl relative flex justify-center items-center" style={{ minHeight: '520px' }}>
           <AnimatePresence mode="wait">
             <motion.div
               key={currentIndex}

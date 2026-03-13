@@ -62,7 +62,6 @@ export const api = {
     apply: async (formData: FormData) => {
       const res = await fetch(`${API_URL}/mentor/apply`, {
         method: 'POST',
-        // Omit Content-Type to let browser set boundary for multipart/form-data
         body: formData,
       });
       if (!res.ok) {
@@ -72,4 +71,61 @@ export const api = {
       return res.json();
     },
   },
+  student: {
+    getEnrolledCourses: async () => {
+      const token = localStorage.getItem('auth_token');
+      const res = await fetch(`${API_URL}/student/courses`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      if (!res.ok) throw new Error('Failed to fetch enrolled courses');
+      return res.json();
+    }
+  },
+  payment: {
+    createOrder: async (amount: number) => {
+      const token = localStorage.getItem('auth_token');
+      const res = await fetch(`${API_URL}/payment/create-order`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+        body: JSON.stringify({ amount })
+      });
+      if (!res.ok) throw new Error('Order creation failed');
+      return res.json();
+    },
+    simulate: async (amount: number, items: any[]) => {
+      const token = localStorage.getItem('auth_token');
+      const res = await fetch(`${API_URL}/payment/simulate`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+        body: JSON.stringify({ amount, items })
+      });
+      if (!res.ok) throw new Error('Simulated payment failed');
+      return res.json();
+    }
+  },
+  quiz: {
+    getByCourseId: async (courseId: string) => {
+      const token = localStorage.getItem('auth_token');
+      const res = await fetch(`${API_URL}/courses/${courseId}/quiz`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      return res.json();
+    },
+    submitAttempt: async (courseId: string, answers: any[]) => {
+      const token = localStorage.getItem('auth_token');
+      const res = await fetch(`${API_URL}/courses/${courseId}/quiz/attempts`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+        body: JSON.stringify({ answers })
+      });
+      return res.json();
+    },
+    getAttempts: async (courseId: string) => {
+      const token = localStorage.getItem('auth_token');
+      const res = await fetch(`${API_URL}/courses/${courseId}/quiz/attempts`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      return res.json();
+    }
+  }
 };

@@ -30,6 +30,7 @@ if (process.env.NODE_ENV === 'development') {
 // Route files
 const auth = require('./routes/auth');
 const courses = require('./routes/courses');
+const student = require('./routes/student');
 const mentor = require('./routes/mentor');
 const books = require('./routes/books');
 const admin = require('./routes/admin');
@@ -38,6 +39,7 @@ const payment = require('./routes/payment');
 // Mount routers
 app.use('/api/v1/auth', auth);
 app.use('/api/v1/courses', courses);
+app.use('/api/v1/student', student);
 app.use('/api/v1/mentor', mentor);
 app.use('/api/v1/books', books);
 app.use('/api/v1/admin', admin);

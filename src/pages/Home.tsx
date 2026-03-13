@@ -6,9 +6,13 @@ import { Carousel } from '../components/animations/Carousel';
 import { GlareCard } from '../components/animations/GlareCard';
 import { GlitchText } from '../components/animations/GlitchText';
 import { Marquee } from '../components/animations/Marquee';
+import InfiniteMenu from '../components/animations/InfiniteMenu';
+import { formatCurrency } from '../utils/currencies';
+import { GraduationCap, Sparkles, CheckCircle, Rocket, BookOpen } from 'lucide-react';
 
 export default function Home() {
   const [featuredCourses, setFeaturedCourses] = useState<Course[]>([]);
+  const [trendingBooks, setTrendingBooks] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
@@ -18,9 +22,16 @@ export default function Home() {
   useEffect(() => {
     const fetchCourses = async () => {
       try {
-        const res = await api.courses.getAll();
-        if (res.success) {
-          setFeaturedCourses(res.data.slice(0, 6)); // Top 6 for home
+        const [courseRes, bookRes] = await Promise.all([
+          api.courses.getAll(),
+          fetch('/api/v1/books').then(res => res.json())
+        ]);
+        
+        if (courseRes.success) {
+          setFeaturedCourses(courseRes.data.slice(0, 6)); // Top 6 for home
+        }
+        if (bookRes.success) {
+          setTrendingBooks(bookRes.data.slice(0, 8)); // Top 8 books
         }
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Failed to fetch courses');
@@ -65,7 +76,7 @@ export default function Home() {
               {/* Floating stats card */}
               <div className="absolute bottom-10 -left-6 lg:-left-12 bg-base-100 shadow-xl rounded-2xl p-4 flex items-center gap-4 animate-bounce hover:scale-105 transition-transform duration-300">
                 <div className="bg-success text-success-content p-3 rounded-xl shadow-inner">
-                  <span className="text-2xl">🎓</span>
+                  <GraduationCap className="w-6 h-6"/>
                 </div>
                 <div>
                   <div className="font-extrabold text-xl">100+</div>
@@ -77,8 +88,8 @@ export default function Home() {
 
           {/* Hero Text */}
           <div className="w-full lg:w-1/2 flex flex-col items-center lg:items-start text-center lg:text-left z-10">
-            <div className="badge badge-primary badge-outline badge-lg mb-6 font-semibold p-4 shadow-sm">
-              ✨ Never Stop Learning
+            <div className="badge badge-primary badge-outline badge-lg mb-6 font-semibold p-4 shadow-sm flex items-center gap-2">
+              <Sparkles className="w-4 h-4"/> Never Stop Learning
             </div>
             
             <h1 className="text-5xl lg:text-7xl font-extrabold leading-tight mb-6">
@@ -99,9 +110,9 @@ export default function Home() {
                   onChange={(e) => setCategory(e.target.value)}
                 >
                   <option value="">All Levels</option>
-                  <option value="kindergarten">🧸 Kindergarten</option>
-                  <option value="highschool">📐 High School</option>
-                  <option value="college">🎓 College</option>
+                  <option value="kindergarten">Kindergarten</option>
+                  <option value="highschool">High School</option>
+                  <option value="college">College</option>
                 </select>
                 <div className="flex-1">
                   <input 
@@ -117,8 +128,8 @@ export default function Home() {
             </form>
 
             <div className="mt-8 flex gap-6 text-sm text-base-content/60 font-medium">
-              <span className="flex items-center gap-1">✅ Lifetime access</span>
-              <span className="flex items-center gap-1">✅ Expert guidance</span>
+              <span className="flex items-center gap-2"><CheckCircle className="w-4 h-4 text-success"/> Lifetime access</span>
+              <span className="flex items-center gap-2"><CheckCircle className="w-4 h-4 text-success"/> Expert guidance</span>
             </div>
           </div>
 
@@ -145,9 +156,9 @@ export default function Home() {
         ) : (
           <Carousel>
             {featuredCourses.map((course) => (
-              <GlareCard key={(course as any)._id || course.id} className="w-full mx-2 h-full max-h-[420px]">
+              <GlareCard key={(course as any)._id || course.id} className="w-full mx-2 h-full">
                 <div className="card bg-base-100/90 backdrop-blur-md shadow-xl border border-base-200 hover:-translate-y-2 hover:shadow-2xl transition-all duration-300 group h-full">
-                  <figure className="h-56 relative overflow-hidden bg-base-300">
+                  <figure className="h-80 shrink-0 relative overflow-hidden bg-base-300">
                   <img 
                     src={course.image || `https://placehold.co/600x400/6419e6/fff?text=${encodeURIComponent(course.title)}`} 
                     alt={course.title} 
@@ -177,7 +188,7 @@ export default function Home() {
                         <span>{parseFloat(course.rating?.toString() || '0').toFixed(1)}</span>
                       </div>
                       <div className="text-2xl font-extrabold text-primary">
-                        ${course.price}
+                        {formatCurrency(course.price)}
                       </div>
                     </div>
                     <Link to={`/courses/${(course as any)._id || course.id}`} className="btn btn-primary btn-sm w-full shadow-md text-base">
@@ -192,8 +203,40 @@ export default function Home() {
         )}
 
         <div className="text-center mt-12">
-          <Link to="/courses" className="btn btn-primary btn-lg shadow-lg hover:shadow-primary/50">
-            Explore All Courses 🚀
+          <Link to="/courses" className="btn btn-primary btn-lg shadow-lg hover:shadow-primary/50 flex items-center gap-2 mx-auto w-fit">
+            Explore All Courses <Rocket className="w-5 h-5"/>
+          </Link>
+        </div>
+      </div>
+
+      {/* Trending Books Section */}
+      <div className="py-20 bg-base-300/30">
+        <div className="max-w-7xl mx-auto px-4 mb-10">
+          <div className="text-center">
+            <h2 className="text-4xl font-extrabold mb-4">Trending Books</h2>
+            <p className="text-base-content/60 text-lg max-w-2xl mx-auto mb-8">
+              Discover our most popular learning resources and textbooks.
+            </p>
+          </div>
+        </div>
+        
+        {trendingBooks.length > 0 && (
+          <div style={{ height: '600px', position: 'relative' }}>
+            <InfiniteMenu 
+              items={trendingBooks.map(book => ({
+                image: book.image || `https://placehold.co/400x600/6419e6/fff?text=${encodeURIComponent(book.title)}`,
+                link: `/books/${book._id}`,
+                title: book.title,
+                description: book.author
+              }))}
+              scale={1}
+            />
+          </div>
+        )}
+        
+        <div className="text-center mt-10">
+          <Link to="/books" className="btn btn-primary btn-lg shadow-lg hover:shadow-primary/50 flex items-center gap-2 mx-auto w-fit">
+            Explore Library <BookOpen className="w-5 h-5"/>
           </Link>
         </div>
       </div>

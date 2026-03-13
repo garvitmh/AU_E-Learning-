@@ -11,6 +11,12 @@ const router = express.Router();
 
 const { protect, authorize } = require('../middleware/auth');
 
+// Include other resource routers
+const quizRouter = require('./quiz');
+
+// Re-route into other resource routers
+router.use('/:courseId/quiz', quizRouter);
+
 router
   .route('/')
   .get(getCourses)

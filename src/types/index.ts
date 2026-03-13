@@ -22,10 +22,12 @@ export interface Course {
 }
 
 export interface Video {
-  id: string;
+  _id?: string;
+  id?: string;
   title: string;
   videoUrl: string;
-  duration: string; // format: "10:10"
+  duration: string;
+  isTrial?: boolean;
 }
 
 export interface CourseDetail extends Course {

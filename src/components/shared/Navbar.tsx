@@ -2,7 +2,7 @@ import { useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth, useCart } from '../../hooks';
 import { ThemeContext, THEMES } from '../../context/ThemeContext';
-import { BookOpen, Layers, LibraryBig, Presentation, Palette, ShoppingCart, User, LogOut, Settings, LayoutDashboard, Shield, BookMarked, Menu } from 'lucide-react';
+import { BookOpen, Layers, LibraryBig, Presentation, Palette, ShoppingCart, User, LogOut, Settings, LayoutDashboard, Shield, BookMarked, Menu, Home, Baby, GraduationCap, School } from 'lucide-react';
 
 export default function Navbar() {
   const { user, logout } = useAuth();
@@ -25,13 +25,15 @@ export default function Navbar() {
             <Menu className="w-6 h-6" />
           </div>
           <ul tabIndex={0} className="menu menu-md dropdown-content mt-3 z-[1] p-3 shadow-xl bg-base-100/90 backdrop-blur-lg rounded-box w-64 gap-1 border border-base-200">
+            <li><Link to="/" className="py-3"><Home className="w-5 h-5 mr-3"/> Home</Link></li>
+            {user && <li><Link to="/dashboard" className="py-3"><BookMarked className="w-5 h-5 mr-3"/> My Courses</Link></li>}
             <li><Link to="/books" className="py-3"><BookOpen className="w-5 h-5 mr-3"/> Books</Link></li>
             <li>
               <a className="py-3"><Layers className="w-5 h-5 mr-3"/> Categories</a>
               <ul className="p-2 gap-1">
-                <li><Link to="/courses?cat=kindergarten" className="py-2">🧸 Kindergarten</Link></li>
-                <li><Link to="/courses?cat=highschool" className="py-2">📐 High School</Link></li>
-                <li><Link to="/courses?cat=college" className="py-2">🎓 College</Link></li>
+                <li><Link to="/courses?cat=kindergarten" className="py-2"><Baby className="w-4 h-4 mr-2"/> Kindergarten</Link></li>
+                <li><Link to="/courses?cat=highschool" className="py-2"><School className="w-4 h-4 mr-2"/> High School</Link></li>
+                <li><Link to="/courses?cat=college" className="py-2"><GraduationCap className="w-4 h-4 mr-2"/> College</Link></li>
               </ul>
             </li>
             <li><Link to="/courses" className="py-3"><LibraryBig className="w-5 h-5 mr-3"/> All Courses</Link></li>
@@ -45,14 +47,16 @@ export default function Navbar() {
       
       <div className="navbar-center hidden lg:flex">
         <ul className="menu menu-horizontal px-1 font-medium gap-2 text-base items-center">
+          <li><Link to="/" className="hover:text-primary transition-colors flex items-center gap-2 px-4"><Home className="w-5 h-5"/> Home</Link></li>
+          {user && <li><Link to="/dashboard" className="hover:text-primary transition-colors flex items-center gap-2 px-4"><BookMarked className="w-5 h-5"/> My Courses</Link></li>}
           <li><Link to="/books" className="hover:text-primary transition-colors flex items-center gap-2 px-4"><BookOpen className="w-5 h-5"/> Books</Link></li>
           <li>
             <details>
               <summary className="hover:text-primary transition-colors flex items-center gap-2 px-4"><Layers className="w-5 h-5"/> Categories</summary>
               <ul className="p-3 shadow-xl bg-base-100/90 backdrop-blur-lg rounded-box w-56 z-50 gap-1 border border-base-200 mt-4">
-                <li><Link to="/courses?cat=kindergarten" className="py-2">🧸 Kindergarten</Link></li>
-                <li><Link to="/courses?cat=highschool" className="py-2">📐 High School</Link></li>
-                <li><Link to="/courses?cat=college" className="py-2">🎓 College</Link></li>
+                <li><Link to="/courses?cat=kindergarten" className="py-2 flex items-center"><Baby className="w-4 h-4 mr-2"/> Kindergarten</Link></li>
+                <li><Link to="/courses?cat=highschool" className="py-2 flex items-center"><School className="w-4 h-4 mr-2"/> High School</Link></li>
+                <li><Link to="/courses?cat=college" className="py-2 flex items-center"><GraduationCap className="w-4 h-4 mr-2"/> College</Link></li>
               </ul>
             </details>
           </li>

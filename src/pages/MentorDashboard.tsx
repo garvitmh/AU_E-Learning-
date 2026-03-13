@@ -3,6 +3,7 @@ import { useAuth } from '../hooks/useAuth';
 import { useNavigate, Link } from 'react-router-dom';
 import { Card, CardHeader, CardBody, Button, Badge, Input, CloudinaryUploadWidget } from '../components/shared';
 import { LayoutDashboard, BookOpen, PlusCircle, BarChart3, Settings, Users, Star, DollarSign, Image as ImageIcon } from 'lucide-react';
+import { formatCurrency } from '../utils/currencies';
 
 export default function MentorDashboard() {
   const { user, isAuthenticated } = useAuth();
@@ -145,7 +146,7 @@ export default function MentorDashboard() {
                    <div className="absolute top-0 right-0 p-4 opacity-20 group-hover:scale-110 transition-transform"><DollarSign className="w-24 h-24" /></div>
                    <CardBody className="p-6">
                      <div className="text-sm font-bold text-success-content/80 uppercase tracking-wider mb-1">Total Earnings</div>
-                     <div className="text-5xl font-black">${mentorStats.totalEarnings.toLocaleString()}</div>
+                     <div className="text-5xl font-black">{formatCurrency(mentorStats.totalEarnings)}</div>
                      <div className="text-success-content font-semibold mt-2 flex items-center gap-1">Lifetime revenue generated</div>
                      <Button className="mt-4 bg-white text-success border-none hover:bg-base-200 self-start">Withdraw Funds</Button>
                    </CardBody>
@@ -169,7 +170,7 @@ export default function MentorDashboard() {
                       </div>
                       <CardBody className="p-5">
                         <h3 className="font-bold text-lg mb-1 truncate" title={course.title}>{course.title}</h3>
-                        <p className="text-primary font-bold mb-3">${course.price}</p>
+                        <p className="text-primary font-bold mb-3">{formatCurrency(course.price)}</p>
                         <Button variant="outline" size="sm" className="w-full">Manage Course</Button>
                       </CardBody>
                     </Card>
@@ -209,7 +210,7 @@ export default function MentorDashboard() {
                      
                      <div className="grid grid-cols-2 gap-6">
                        <Input 
-                         label="Price ($)" 
+                         label="Price (INR)" 
                          type="number" 
                          value={newCourse.price} 
                          onChange={(e: any) => setNewCourse({...newCourse, price: parseFloat(e.target.value)})} 
@@ -284,8 +285,8 @@ export default function MentorDashboard() {
                         <div>
                           <h3 className="m-0 mb-1 font-bold text-lg truncate max-w-[300px]" title={course.title}>{course.title}</h3>
                           <div className="flex items-center gap-3 text-sm">
-                            <Badge variant="outline">{course.category}</Badge>
-                            <span className="font-semibold text-primary">${course.price}</span>
+                            <Badge variant="secondary">{course.category}</Badge>
+                            <span className="font-semibold text-primary">{formatCurrency(course.price)}</span>
                           </div>
                         </div>
                       </div>

@@ -11,6 +11,10 @@ exports.register = async (req, res, next) => {
   try {
     const { username, email, password, phone } = req.body;
 
+    if (!password) {
+      return res.status(400).json({ success: false, error: 'Please add a password' });
+    }
+
     // Create user
     const user = await User.create({
       username,
@@ -69,20 +73,27 @@ exports.login = async (req, res, next) => {
 exports.googleLogin = async (req, res, next) => {
   try {
     const { token } = req.body;
+    console.log('Google login attempt with token length:', token ? token.length : 0);
+    
     if (!token) {
       return res.status(400).json({ success: false, error: 'Google token is required' });
     }
 
     // Fetch user profile using the access_token from Google's userinfo endpoint
+    console.log('Fetching user info from Google...');
     const googleRes = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
       headers: { Authorization: `Bearer ${token}` },
     });
 
     if (!googleRes.ok) {
+      const errorText = await googleRes.text();
+      console.log('Google API error:', googleRes.status, errorText);
       return res.status(401).json({ success: false, error: 'Invalid Google access token' });
     }
 
-    const { name, email, sub } = await googleRes.json();
+    const googleUser = await googleRes.json();
+    console.log('Google User Info received for:', googleUser.email);
+    const { name, email, sub } = googleUser;
 
     if (!email) {
       return res.status(400).json({ success: false, error: 'Could not retrieve email from Google' });
@@ -91,6 +102,7 @@ exports.googleLogin = async (req, res, next) => {
     let user = await User.findOne({ email });
 
     if (!user) {
+      console.log('Creating new user from Google profile:', email);
       user = await User.create({
         username: name || email.split('@')[0],
         email,
@@ -98,13 +110,15 @@ exports.googleLogin = async (req, res, next) => {
         role: 'student'
       });
     } else if (!user.googleId) {
+      console.log('Updating existing user with Google ID:', email);
       user.googleId = sub;
       await user.save();
     }
 
+    console.log('Google login successful for:', email);
     sendTokenResponse(user, 200, res);
   } catch (err) {
-    console.error(err);
+    console.error('CRITICAL ERROR in googleLogin:', err.stack || err);
     res.status(400).json({
       success: false,
       error: 'Google login failed'

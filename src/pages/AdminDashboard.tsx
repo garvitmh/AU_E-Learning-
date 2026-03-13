@@ -3,6 +3,7 @@ import { useAuth } from '../hooks/useAuth';
 import { useNavigate } from 'react-router-dom';
 import { Card, Badge, Button } from '../components/shared';
 import { Users, FileText, BookOpen, CheckCircle, XCircle, Search, ExternalLink } from 'lucide-react';
+import { formatCurrency } from '../utils/currencies';
 
 export default function AdminDashboard() {
   const { user, isAuthenticated } = useAuth();
@@ -13,6 +14,7 @@ export default function AdminDashboard() {
   const [applications, setApplications] = useState<any[]>([]);
   const [users, setUsers] = useState<any[]>([]);
   const [courses, setCourses] = useState<any[]>([]);
+  const [enrollments, setEnrollments] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
   const fetchData = async () => {
@@ -22,10 +24,11 @@ export default function AdminDashboard() {
       const headers = { 'Authorization': `Bearer ${token}` };
       const API_BASE = '/api/v1';
 
-      const [usersRes, coursesRes, appsRes] = await Promise.all([
+      const [usersRes, coursesRes, appsRes, enrollsRes] = await Promise.all([
         fetch(`${API_BASE}/admin/users`, { headers }),
         fetch(`${API_BASE}/admin/courses`, { headers }),
-        fetch(`${API_BASE}/admin/applications`, { headers })
+        fetch(`${API_BASE}/admin/applications`, { headers }),
+        fetch(`${API_BASE}/admin/enrollments`, { headers })
       ]);
 
       if (usersRes.ok) {
@@ -39,6 +42,10 @@ export default function AdminDashboard() {
       if (appsRes.ok) {
         const data = await appsRes.json();
         setApplications(data.data);
+      }
+      if (enrollsRes.ok) {
+        const data = await enrollsRes.json();
+        setEnrollments(data.data);
       }
     } catch (error) {
       console.error("Failed to fetch admin data", error);
@@ -84,6 +91,21 @@ export default function AdminDashboard() {
     }
   };
 
+  const handleRevokeEnrollment = async (enrollmentId: string) => {
+    if (!window.confirm('Are you sure you want to revoke access?')) return;
+    try {
+      const token = localStorage.getItem('auth_token');
+      const API_BASE = '/api/v1';
+      const res = await fetch(`${API_BASE}/admin/enrollments/${enrollmentId}`, {
+        method: 'DELETE',
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      if (res.ok) fetchData();
+    } catch (error) {
+      console.error("Failed to revoke enrollment", error);
+    }
+  };
+
   // Secure route
   useEffect(() => {
     if (!isAuthenticated) {
@@ -117,6 +139,7 @@ export default function AdminDashboard() {
               { id: 'applications', label: 'Mentor Applications', icon: <FileText className="w-5 h-5"/> },
               { id: 'users', label: 'User Directory', icon: <Users className="w-5 h-5"/> },
               { id: 'courses', label: 'Course Catalog', icon: <BookOpen className="w-5 h-5"/> },
+              { id: 'enrollments', label: 'Enrollments Access', icon: <CheckCircle className="w-5 h-5"/> },
             ].map(tab => (
               <button
                 key={tab.id}
@@ -142,6 +165,7 @@ export default function AdminDashboard() {
               {activeTab === 'applications' && 'Pending Mentor Applications'}
               {activeTab === 'users' && 'User Directory'}
               {activeTab === 'courses' && 'Global Course Catalog'}
+              {activeTab === 'enrollments' && 'User Enrollments'}
             </h2>
             <div className="relative w-64">
               <span className="absolute left-3 top-1/2 -translate-y-1/2 text-base-content/50">
@@ -282,7 +306,7 @@ export default function AdminDashboard() {
                           <td><Badge variant="secondary">{c.category}</Badge></td>
                           <td>
                             <div className="flex flex-col text-sm">
-                              <span className="font-semibold text-primary">${c.price}</span>
+                              <span className="font-semibold text-primary">{formatCurrency(c.price)}</span>
                               <span className="text-base-content/60 text-xs">{c.students?.toLocaleString() || 0} enrolled</span>
                             </div>
                           </td>
@@ -308,11 +332,54 @@ export default function AdminDashboard() {
                 </table>
               )}
 
+              {activeTab === 'enrollments' && (
+                <table className="table w-full">
+                  <thead className="bg-base-200 text-base-content/80">
+                    <tr>
+                      <th>Student</th>
+                      <th>Course</th>
+                      <th>Progress</th>
+                      <th>Enrolled On</th>
+                      <th className="text-right">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {isLoading ? (
+                       <tr><td colSpan={5} className="text-center py-8">Loading enrollments...</td></tr>
+                    ) : (
+                      enrollments.filter(e => e.user?.username.toLowerCase().includes(searchQuery.toLowerCase()) || e.course?.title.toLowerCase().includes(searchQuery.toLowerCase())).map(e => (
+                        <tr key={e._id || e.id} className="hover">
+                          <td className="font-bold">{e.user?.username || 'Unknown'} <span className="block text-xs font-normal text-base-content/60">{e.user?.email}</span></td>
+                          <td className="text-base-content/80 max-w-[200px] truncate" title={e.course?.title}>{e.course?.title || 'Unknown Course'}</td>
+                          <td>
+                            <div className="flex items-center gap-2">
+                              <progress className="progress progress-primary w-20" value={e.progress || 0} max="100"></progress>
+                              <span className="text-xs font-mono">{e.progress || 0}%</span>
+                            </div>
+                          </td>
+                          <td className="text-base-content/70">{new Date(e.createdAt).toLocaleDateString()}</td>
+                          <td className="text-right">
+                            <Button 
+                              variant="outline" 
+                              size="sm" 
+                              className="bg-base-100 text-error hover:bg-error hover:text-white border-base-300 hover:border-error"
+                              onClick={() => handleRevokeEnrollment(e._id || e.id)}
+                            >
+                              Revoke
+                            </Button>
+                          </td>
+                        </tr>
+                      ))
+                    )}
+                  </tbody>
+                </table>
+              )}
+
             </div>
             
             {/* Pagination Mock Footer */}
             <div className="bg-base-200 p-4 border-t border-base-300 flex justify-between items-center">
-               <span className="text-sm text-base-content/70">Showing 1 to {activeTab === 'users' ? users.length : activeTab === 'courses' ? courses.length : applications.length} of entries</span>
+               <span className="text-sm text-base-content/70">Showing 1 to {activeTab === 'users' ? users.length : activeTab === 'courses' ? courses.length : activeTab === 'enrollments' ? enrollments.length : applications.length} of entries</span>
                <div className="join">
                  <button className="join-item btn btn-sm btn-disabled">«</button>
                  <button className="join-item btn btn-sm bg-base-100">Page 1</button>

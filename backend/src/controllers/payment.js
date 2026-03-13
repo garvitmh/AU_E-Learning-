@@ -89,3 +89,50 @@ exports.verifyPayment = async (req, res, next) => {
     });
   }
 };
+
+const Enrollment = require('../models/Enrollment');
+
+// @desc    Simulate payment and enroll user
+// @route   POST /api/v1/payment/simulate
+// @access  Private
+exports.simulatePayment = async (req, res, next) => {
+  try {
+    const { items, amount } = req.body;
+    
+    if (!items || items.length === 0) {
+      return res.status(400).json({ success: false, error: 'No items in cart' });
+    }
+
+    // Create enrollment records for each course
+    for (const item of items) {
+      // Check if already enrolled
+      const existing = await Enrollment.findOne({
+        user: req.user.id,
+        course: item.courseId
+      });
+
+      if (!existing) {
+        await Enrollment.create({
+          user: req.user.id,
+          course: item.courseId,
+          progress: 0
+        });
+      }
+    }
+
+    // Simulate network delay for realism
+    setTimeout(() => {
+      res.status(200).json({
+        success: true,
+        message: 'Mock payment successful and courses enrolled!'
+      });
+    }, 1500);
+
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      success: false,
+      error: 'Payment Simulation Failed'
+    });
+  }
+};

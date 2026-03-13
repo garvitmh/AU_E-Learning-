@@ -1,6 +1,7 @@
 const User = require('../models/User');
 const Course = require('../models/Course');
 const Application = require('../models/Application'); // Assume this exists or skip
+const Enrollment = require('../models/Enrollment');
 
 // @desc    Get all users
 // @route   GET /api/v1/admin/users
@@ -116,6 +117,71 @@ exports.getApplications = async (req, res, next) => {
       data: MOCK_APPLICATIONS
     });
   } catch (err) {
+    res.status(500).json({ success: false, error: 'Server Error' });
+  }
+};
+
+// @desc    Get all enrollments
+// @route   GET /api/v1/admin/enrollments
+// @access  Private/Admin
+exports.getEnrollments = async (req, res, next) => {
+  try {
+    const enrollments = await Enrollment.find()
+      .populate('user', 'username email')
+      .populate('course', 'title category price');
+
+    res.status(200).json({
+      success: true,
+      count: enrollments.length,
+      data: enrollments
+    });
+  } catch (error) {
+    res.status(500).json({ success: false, error: 'Server Error' });
+  }
+};
+
+// @desc    Grant enrollment
+// @route   POST /api/v1/admin/enrollments
+// @access  Private/Admin
+exports.grantEnrollment = async (req, res, next) => {
+  try {
+    const { userId, courseId } = req.body;
+    
+    // Check if already enrolled
+    const existing = await Enrollment.findOne({ user: userId, course: courseId });
+    if (existing) {
+      return res.status(400).json({ success: false, error: 'User already enrolled in this course' });
+    }
+
+    const enrollment = await Enrollment.create({
+      user: userId,
+      course: courseId,
+      progress: 0
+    });
+
+    res.status(201).json({
+      success: true,
+      data: enrollment
+    });
+  } catch (error) {
+    res.status(500).json({ success: false, error: 'Server Error' });
+  }
+};
+
+// @desc    Revoke enrollment
+// @route   DELETE /api/v1/admin/enrollments/:id
+// @access  Private/Admin
+exports.revokeEnrollment = async (req, res, next) => {
+  try {
+    const enrollment = await Enrollment.findById(req.params.id);
+    if (!enrollment) {
+      return res.status(404).json({ success: false, error: 'Enrollment not found' });
+    }
+
+    await enrollment.deleteOne();
+
+    res.status(200).json({ success: true, data: {} });
+  } catch (error) {
     res.status(500).json({ success: false, error: 'Server Error' });
   }
 };

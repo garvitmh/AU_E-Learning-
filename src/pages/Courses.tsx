@@ -4,15 +4,18 @@ import { api } from '../services/api';
 import { useDebounce } from '../hooks';
 import { SplitText } from '../components/animations/SplitText';
 import { AnimatedList } from '../components/animations/AnimatedList';
+import { formatCurrency } from '../utils/currencies';
 
-const CATEGORY_EMOJIS: Record<string, string> = {
-  all: '🗂️',
-  kindergarten: '🧸',
-  highschool: '📐',
-  college: '🎓',
-  computer: '💻',
-  science: '🔬',
-  engineering: '⚙️',
+import { BookOpen, Search, Baby, School, GraduationCap, Monitor, Microscope, Wrench, Play } from 'lucide-react';
+
+const CATEGORY_ICONS: Record<string, any> = {
+  all: BookOpen,
+  kindergarten: Baby,
+  highschool: School,
+  college: GraduationCap,
+  computer: Monitor,
+  science: Microscope,
+  engineering: Wrench,
 };
 
 const CATEGORY_COLORS: Record<string, string> = {
@@ -96,7 +99,7 @@ export default function Courses() {
         <div className="absolute bottom-0 left-0 w-[300px] h-[300px] bg-secondary/10 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2"></div>
         
         <div className="max-w-4xl mx-auto text-center relative z-10">
-          <div className="text-6xl mb-4 animate-bounce">📚</div>
+          <div className="text-primary mb-4 animate-bounce flex justify-center"><BookOpen className="w-16 h-16"/></div>
           
           <h1 className="text-5xl lg:text-6xl font-extrabold text-base-content mb-4 tracking-tight">
             <SplitText text="Explore Our Courses" delay={50} className="inline-block" />
@@ -108,7 +111,7 @@ export default function Courses() {
           
           {/* Search */}
           <div className="relative max-w-2xl mx-auto shadow-2xl rounded-full bg-base-100 p-2 flex border border-base-300">
-            <span className="absolute left-6 top-1/2 -translate-y-1/2 text-xl opacity-50">🔍</span>
+            <span className="absolute left-6 top-1/2 -translate-y-1/2 opacity-50 text-base-content"><Search className="w-5 h-5"/></span>
             <input
               type="search"
               placeholder="Search any course, topic or skill..."
@@ -134,7 +137,12 @@ export default function Courses() {
                   : 'btn-ghost bg-base-200 border border-base-300 hover:border-primary hover:bg-base-300'
               }`}
             >
-              <span className="text-lg">{CATEGORY_EMOJIS[cat.key]}</span>
+              <span className="text-lg">
+                {(() => {
+                  const Icon = CATEGORY_ICONS[cat.key];
+                  return Icon ? <Icon className="w-5 h-5" /> : <BookOpen className="w-5 h-5" />;
+                })()}
+              </span>
               <span className="font-semibold">{cat.label}</span>
             </button>
           ))}
@@ -164,7 +172,7 @@ export default function Courses() {
           </div>
         ) : filteredCourses.length === 0 ? (
           <div className="text-center py-32 bg-base-200 rounded-3xl border border-base-300 border-dashed">
-            <div className="text-6xl mb-4 opacity-50">🔍</div>
+            <div className="text-base-content/50 mb-4 flex justify-center"><Search className="w-16 h-16"/></div>
             <h3 className="text-2xl font-bold mb-2 text-base-content">No courses found</h3>
             <p className="text-base-content/60 mb-6 max-w-md mx-auto">We couldn't find anything matching your search criteria. Try adjusting your filters.</p>
             <button className="btn btn-primary" onClick={() => { setSelectedCategory('all'); setSearchTerm(''); }}>
@@ -191,7 +199,7 @@ export default function Courses() {
                     </span>
                   </div>
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-center pb-4">
-                    <span className="text-white font-bold opacity-0 group-hover:opacity-100 transition-opacity delay-100 duration-300 translate-y-4 group-hover:translate-y-0 text-sm">Preview Course ▶</span>
+                    <span className="text-white font-bold opacity-0 group-hover:opacity-100 transition-opacity delay-100 duration-300 translate-y-4 group-hover:translate-y-0 text-sm flex items-center gap-1">Preview Course <Play className="w-4 h-4 fill-white"/></span>
                   </div>
                 </figure>
                 
@@ -214,7 +222,7 @@ export default function Courses() {
                     <div className="flex items-center justify-between">
                       <div className="flex flex-col">
                         <span className="text-xs text-success font-bold uppercase tracking-wider">Top Rated</span>
-                        <span className="text-2xl font-extrabold text-base-content">${course.price}</span>
+                        <span className="text-2xl font-extrabold text-base-content">{formatCurrency(course.price)}</span>
                       </div>
                       <Link to={`/courses/${course._id}`} className="btn btn-primary">
                         Details →

@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { api } from '../services/api';
 import { useCart } from '../hooks';
+import { formatCurrency } from '../utils/currencies';
+import { SearchX, Star, User, Tv, Globe, Lock, Play, Timer, ShoppingCart, Smartphone, Infinity, Trophy, FileText, BookOpen, GraduationCap, Video } from 'lucide-react';
 
 export default function CourseDetail() {
   const { id } = useParams<{ id: string }>();
@@ -10,6 +12,7 @@ export default function CourseDetail() {
   const [error, setError] = useState<string | null>(null);
   const [selectedVideo, setSelectedVideo] = useState<any>(null);
   const [activeTab, setActiveTab] = useState('curriculum');
+  const [enrolledCourseIds, setEnrolledCourseIds] = useState<string[]>([]);
   const { addToCart, isInCart } = useCart();
 
   useEffect(() => {
@@ -22,6 +25,15 @@ export default function CourseDetail() {
           if (res.data.videos?.length > 0) {
             setSelectedVideo(res.data.videos[0]);
           }
+        }
+        
+        // Fetch enrollments to check access
+        const token = localStorage.getItem('auth_token');
+        if (token) {
+           const enrollRes = await api.student.getEnrolledCourses();
+           if(enrollRes.success && enrollRes.data) {
+              setEnrolledCourseIds(enrollRes.data.map((e: any) => e.id));
+           }
         }
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Failed to fetch course');
@@ -40,7 +52,7 @@ export default function CourseDetail() {
 
   if (error || !course) return (
     <div className="min-h-[70vh] flex flex-col items-center justify-center gap-6">
-      <div className="text-8xl">😕</div>
+      <div className="text-primary mb-4"><SearchX className="w-24 h-24 mx-auto"/></div>
       <h2 className="text-3xl font-extrabold">{error || 'Course Not Found'}</h2>
       <Link to="/courses" className="btn btn-outline btn-primary mt-4">← Back to Courses</Link>
     </div>
@@ -48,6 +60,11 @@ export default function CourseDetail() {
 
   const videos = course.videos || [];
   const inCart = isInCart(course._id);
+  const isEnrolled = enrolledCourseIds.includes(course._id);
+
+  const canWatchVideo = (videoInfo: any) => {
+    return isEnrolled || videoInfo?.isTrial;
+  };
 
   return (
     <div className="min-h-screen bg-base-100 pb-20">
@@ -76,7 +93,7 @@ export default function CourseDetail() {
               <div className="badge badge-primary badge-lg uppercase font-bold tracking-widest">{course.category}</div>
               {course.rating && (
                 <div className="badge badge-warning badge-lg font-bold gap-1 shadow-sm">
-                  <span className="text-xs">⭐</span> {parseFloat(course.rating).toFixed(1)}
+                  <Star className="w-3 h-3"/> {parseFloat(course.rating).toFixed(1)}
                 </div>
               )}
             </div>
@@ -92,8 +109,8 @@ export default function CourseDetail() {
             <div className="flex flex-wrap items-center gap-x-8 gap-y-4 mt-2">
               <div className="flex items-center gap-3">
                 <div className="avatar placeholder">
-                  <div className="bg-primary text-primary-content rounded-full w-10">
-                    <span className="font-bold">🧑‍🏫</span>
+                  <div className="bg-primary text-primary-content rounded-full w-10 flex justify-center items-center">
+                    <User className="w-5 h-5"/>
                   </div>
                 </div>
                 <div>
@@ -102,8 +119,8 @@ export default function CourseDetail() {
                 </div>
               </div>
               <div className="flex gap-4">
-                <span className="flex items-center gap-2 text-sm font-medium"><span className="text-lg">📺</span> {videos.length} Lectures</span>
-                <span className="flex items-center gap-2 text-sm font-medium"><span className="text-lg">🌐</span> English</span>
+                <span className="flex items-center gap-2 text-sm font-medium"><Tv className="w-5 h-5 text-primary"/> {videos.length} Lectures</span>
+                <span className="flex items-center gap-2 text-sm font-medium"><Globe className="w-5 h-5 text-secondary"/> English</span>
               </div>
             </div>
           </div>
@@ -112,15 +129,27 @@ export default function CourseDetail() {
           <div className="lg:-mt-24 lg:sticky lg:top-24 z-20">
             <div className="card bg-base-100 shadow-2xl border border-base-300 overflow-hidden group">
               {/* Preview image or video player if one is selected */}
-              <figure className="relative max-h-[260px] bg-base-300">
+              <figure className="relative min-h-[260px] bg-base-300">
                 {selectedVideo ? (
-                  <div className="w-full aspect-video bg-black flex items-center justify-center relative">
-                    <div className="absolute inset-0 bg-cover bg-center opacity-40" style={{ backgroundImage: `url(${course.image})` }}></div>
-                    <div className="z-10 text-center p-6 text-white max-w-full">
-                      <div className="text-4xl mb-3">▶️</div>
-                      <h4 className="font-bold truncate" title={selectedVideo.title}>{selectedVideo.title}</h4>
-                      <p className="text-white/60 text-sm mt-1">{selectedVideo.duration || '10:00'} min</p>
-                    </div>
+                  <div className="w-full aspect-video bg-black flex flex-col items-center justify-center relative">
+                    {canWatchVideo(selectedVideo) ? (
+                      <video 
+                        key={selectedVideo.videoUrl} 
+                        src={selectedVideo.videoUrl} 
+                        controls 
+                        className="w-full h-full object-contain"
+                        autoPlay={!selectedVideo.isTrial}
+                        poster={course.image}
+                      />
+                    ) : (
+                      <div className="flex flex-col items-center justify-center p-6 text-center z-10 w-full h-full">
+                        <div className="absolute inset-0 bg-cover bg-center opacity-30" style={{ backgroundImage: `url(${course.image})` }}></div>
+                        <div className="absolute inset-0 bg-base-300/60 backdrop-blur-sm z-0"></div>
+                        <div className="text-primary mb-4 z-10"><Lock className="w-12 h-12"/></div>
+                        <h4 className="font-bold text-white z-10 max-w-full text-lg shadow-black drop-shadow-md">Premium Video</h4>
+                        <p className="text-white/80 text-sm mt-2 z-10 font-medium">Enroll in this course to unlock "{selectedVideo.title}"</p>
+                      </div>
+                    )}
                   </div>
                 ) : (
                   <>
@@ -130,8 +159,8 @@ export default function CourseDetail() {
                       className="w-full object-cover group-hover:scale-105 transition-transform duration-700" 
                     />
                     <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
-                      <button className="btn btn-circle btn-lg border-none bg-white/20 backdrop-blur-md text-white hover:bg-white hover:text-black">
-                        ▶️
+                      <button className="btn btn-circle btn-lg border-none bg-white/20 backdrop-blur-md text-white hover:bg-white hover:text-black flex justify-center items-center">
+                        <Play className="w-8 h-8 pl-1"/>
                       </button>
                     </div>
                   </>
@@ -140,9 +169,9 @@ export default function CourseDetail() {
 
               <div className="card-body p-6">
                 <div className="flex items-end gap-3 mb-2">
-                  <span className="text-4xl font-extrabold text-base-content">${course.price}</span>
+                  <span className="text-4xl font-extrabold text-base-content">{formatCurrency(course.price)}</span>
                   <span className="text-xl text-base-content/40 line-through font-medium block pb-1">
-                    ${Math.floor(course.price * 1.4)}
+                    {formatCurrency(Math.floor(course.price * 1.4))}
                   </span>
                   <div className="badge badge-success text-[10px] font-bold py-3 uppercase tracking-widest text-success-content ml-auto">
                     30% Off
@@ -150,12 +179,12 @@ export default function CourseDetail() {
                 </div>
 
                 <div className="w-full bg-error-content/20 text-error rounded-md py-2 px-3 text-xs font-bold flex items-center gap-2 mb-4">
-                  <span>⏱️</span> 12 hours left at this price!
+                  <Timer className="w-4 h-4"/> 12 hours left at this price!
                 </div>
 
                 {inCart ? (
-                  <Link to="/cart" className="btn btn-success btn-block shadow-lg text-lg h-14">
-                    View in Cart 🛒
+                  <Link to="/cart" className="btn btn-success btn-block shadow-lg text-lg h-14 flex items-center gap-2 justify-center">
+                    View in Cart <ShoppingCart className="w-5 h-5"/>
                   </Link>
                 ) : (
                   <button 
@@ -178,10 +207,10 @@ export default function CourseDetail() {
 
                 <h4 className="font-bold text-sm mb-3">This course includes:</h4>
                 <ul className="space-y-3 text-sm text-base-content/80 font-medium">
-                  <li className="flex gap-3"><span className="text-lg">📺</span> {videos.length || '15+'} on-demand videos</li>
-                  <li className="flex gap-3"><span className="text-lg">📱</span> Access on mobile and TV</li>
-                  <li className="flex gap-3"><span className="text-lg">♾️</span> Full lifetime access</li>
-                  <li className="flex gap-3"><span className="text-lg">🏆</span> Certificate of completion</li>
+                  <li className="flex gap-3 items-center"><Tv className="w-5 h-5 text-primary"/> {videos.length || '15+'} on-demand videos</li>
+                  <li className="flex gap-3 items-center"><Smartphone className="w-5 h-5 text-secondary"/> Access on mobile and TV</li>
+                  <li className="flex gap-3 items-center"><Infinity className="w-5 h-5 text-accent"/> Full lifetime access</li>
+                  <li className="flex gap-3 items-center"><Trophy className="w-5 h-5 text-warning"/> Certificate of completion</li>
                 </ul>
               </div>
             </div>
@@ -202,7 +231,7 @@ export default function CourseDetail() {
                 className={`tab tab-lg px-8 transition-colors ${activeTab === tab ? 'tab-active text-primary border-primary' : 'text-base-content/50 hover:text-base-content'}`}
                 onClick={() => setActiveTab(tab)}
               >
-                {tab === 'overview' ? '📋 Overview' : tab === 'curriculum' ? '📚 Curriculum' : '🧑‍🏫 Instructor'}
+                {tab === 'overview' ? <span className="flex items-center gap-2"><FileText className="w-5 h-5"/> Overview</span> : tab === 'curriculum' ? <span className="flex items-center gap-2"><BookOpen className="w-5 h-5"/> Curriculum</span> : <span className="flex items-center gap-2"><User className="w-5 h-5"/> Instructor</span>}
               </a>
             ))}
           </div>
@@ -259,36 +288,49 @@ export default function CourseDetail() {
                   </div>
                 ) : (
                   <div className="bg-base-100 border border-base-300 rounded-xl overflow-hidden divide-y divide-base-200">
-                    {videos.map((vid: any, i: number) => (
-                      <button 
-                        key={vid._id || i}
-                        onClick={() => setSelectedVideo(vid)}
-                        className={`w-full text-left p-5 flex items-center justify-between gap-4 transition-all ${
-                          selectedVideo?._id === vid._id 
-                            ? 'bg-primary/5 border-l-4 border-l-primary' 
-                            : 'hover:bg-base-200 border-l-4 border-l-transparent'
-                        }`}
-                      >
-                        <div className="flex items-center gap-4 min-w-0">
-                          <div className={`flex items-center justify-center w-8 h-8 rounded-full ${
-                            selectedVideo?._id === vid._id ? 'bg-primary text-primary-content' : 'bg-base-300 text-base-content/60'
-                          } font-bold text-sm shrink-0`}>
-                            {i + 1}
-                          </div>
-                          <div>
-                            <div className={`font-semibold truncate ${selectedVideo?._id === vid._id ? 'text-primary' : ''}`}>
-                              {vid.title}
+                    {videos.map((vid: any, i: number) => {
+                      const locked = !canWatchVideo(vid);
+                      return (
+                        <button 
+                          key={vid._id || i}
+                          onClick={() => setSelectedVideo(vid)}
+                          className={`w-full text-left p-5 flex items-center justify-between gap-4 transition-all ${
+                            selectedVideo?._id === vid._id 
+                              ? 'bg-primary/5 border-l-4 border-l-primary' 
+                              : 'hover:bg-base-200 border-l-4 border-l-transparent'
+                          } ${locked ? 'opacity-70' : ''}`}
+                        >
+                          <div className="flex items-center gap-4 min-w-0">
+                            <div className={`flex items-center justify-center w-8 h-8 rounded-full ${
+                              selectedVideo?._id === vid._id ? 'bg-primary text-primary-content' : 'bg-base-300 text-base-content/60'
+                            } font-bold text-sm shrink-0`}>
+                              {locked ? <Lock className="w-4 h-4"/> : i + 1}
                             </div>
-                            <div className="text-xs text-base-content/50 mt-1 flex items-center gap-1 font-medium">
-                              <span>▶️</span> Video
+                            <div>
+                              <div className={`font-semibold truncate ${selectedVideo?._id === vid._id ? 'text-primary' : ''}`}>
+                                {vid.title} {vid.isTrial && <span className="badge badge-sm badge-accent ml-2">FREE Preview</span>}
+                              </div>
+                              <div className="text-xs text-base-content/50 mt-1 flex items-center gap-1 font-medium">
+                                {locked ? <Lock className="w-3 h-3"/> : <Play className="w-3 h-3"/>} Video
+                              </div>
                             </div>
                           </div>
-                        </div>
-                        <div className="text-xs font-mono text-base-content/60 shrink-0 bg-base-200 px-2 py-1 rounded">
-                          {vid.duration || '12:00'}
-                        </div>
-                      </button>
-                    ))}
+                          <div className="text-xs font-mono text-base-content/60 shrink-0 bg-base-200 px-2 py-1 rounded">
+                            {vid.duration || '12:00'}
+                          </div>
+                        </button>
+                      );
+                    })}
+                  </div>
+                )}
+
+                {isEnrolled && videos.length > 0 && (
+                  <div className="mt-8 bg-success/10 border border-success/30 rounded-xl p-6 flex flex-col sm:flex-row items-center justify-between gap-6 text-center sm:text-left">
+                     <div>
+                       <h3 className="text-xl font-bold mb-1">Ready to test your knowledge?</h3>
+                       <p className="text-base-content/70 text-sm">Pass the final exam to earn your certificate of completion.</p>
+                     </div>
+                     <Link to={`/courses/${id}/quiz`} className="btn btn-success text-white px-8 shadow-md">Take Final Exam</Link>
                   </div>
                 )}
               </div>
@@ -299,8 +341,8 @@ export default function CourseDetail() {
                 <div className="card-body p-8">
                   <div className="flex flex-col sm:flex-row gap-6">
                     <div className="avatar">
-                      <div className="w-24 h-24 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2 flex items-center justify-center bg-base-300 text-4xl">
-                        🧑‍🏫
+                      <div className="w-24 h-24 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2 flex items-center justify-center bg-base-300">
+                        <User className="w-12 h-12 text-base-content"/>
                       </div>
                     </div>
                     <div>
@@ -310,9 +352,9 @@ export default function CourseDetail() {
                       <p className="text-primary font-bold mb-4">{course.category} Specialist Educator</p>
                       
                       <div className="flex flex-wrap gap-4 mb-4 text-sm font-medium">
-                        <span className="flex items-center gap-2"><span className="text-lg">⭐</span> 4.8 Instructor Rating</span>
-                        <span className="flex items-center gap-2"><span className="text-lg">🎓</span> 124k+ Students</span>
-                        <span className="flex items-center gap-2"><span className="text-lg">🎬</span> 14 Courses</span>
+                        <span className="flex items-center gap-2"><Star className="w-4 h-4 text-warning"/> 4.8 Instructor Rating</span>
+                        <span className="flex items-center gap-2"><GraduationCap className="w-4 h-4 text-primary"/> 124k+ Students</span>
+                        <span className="flex items-center gap-2"><Video className="w-4 h-4 text-secondary"/> 14 Courses</span>
                       </div>
                       
                       <p className="text-base-content/80 text-sm leading-relaxed max-w-2xl">

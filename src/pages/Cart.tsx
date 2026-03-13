@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import { useCart } from '../hooks';
 import { Card, CardBody } from '../components/shared/Card';
 import { Button, Badge } from '../components/shared';
+import { formatCurrency } from '../utils/currencies';
 
 export default function Cart() {
   const { cart, updateQuantity, removeFromCart } = useCart();
@@ -41,7 +42,7 @@ export default function Cart() {
                     </p>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                       <Badge variant="success">★ {item.course.rating}</Badge>
-                      <span style={{ fontWeight: 'bold', color: '#FF464A' }}>₹{item.course.price}</span>
+                      <span style={{ fontWeight: 'bold', color: '#FF464A' }}>{formatCurrency(item.course.price)}</span>
                     </div>
                   </div>
                   <div style={{ textAlign: 'right' }}>
@@ -63,7 +64,7 @@ export default function Cart() {
                       </Button>
                     </div>
                     <p style={{ margin: '0', fontWeight: 'bold', color: '#FF464A' }}>
-                      ₹{item.course.price * item.quantity}
+                      {formatCurrency(item.course.price * item.quantity)}
                     </p>
                     <Button
                       variant="danger"
@@ -86,11 +87,11 @@ export default function Cart() {
               <h3 style={{ marginTop: 0 }}>Order Summary</h3>
               <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
                 <span>Subtotal ({cart.totalItems} items)</span>
-                <span>₹{cart.totalPrice}</span>
+                <span>{formatCurrency(cart.totalPrice)}</span>
               </div>
               <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '1rem', fontWeight: 'bold' }}>
                 <span>Total</span>
-                <span style={{ color: '#FF464A', fontSize: '1.2rem' }}>₹{cart.totalPrice}</span>
+                <span style={{ color: '#FF464A', fontSize: '1.2rem' }}>{formatCurrency(cart.totalPrice)}</span>
               </div>
               <Link to="/checkout" className="w-full">
                 <Button variant="primary" size="lg" style={{ width: '100%' }}>

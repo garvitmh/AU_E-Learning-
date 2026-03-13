@@ -4,7 +4,10 @@ const {
   updateUserStatus,
   getCourses,
   deleteCourse,
-  getApplications
+  getApplications,
+  getEnrollments,
+  grantEnrollment,
+  revokeEnrollment
 } = require('../controllers/admin');
 
 const router = express.Router();
@@ -34,5 +37,14 @@ router.route('/courses/:id')
 // Route: /api/v1/admin/applications
 router.route('/applications')
   .get(getApplications);
+
+// Route: /api/v1/admin/enrollments
+router.route('/enrollments')
+  .get(getEnrollments)
+  .post(grantEnrollment);
+
+// Route: /api/v1/admin/enrollments/:id
+router.route('/enrollments/:id')
+  .delete(revokeEnrollment);
 
 module.exports = router;

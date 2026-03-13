@@ -19,8 +19,8 @@ export default function Playlist({ videos, selectedVideoId, onVideoSelect }: Pla
         <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
           {videos.map((video, index) => (
             <div
-              key={video.id}
-              onClick={() => onVideoSelect(video.id)}
+              key={video.id || video._id}
+              onClick={() => onVideoSelect((video.id || video._id) as string)}
               style={{
                 padding: '1rem',
                 borderRadius: '8px',

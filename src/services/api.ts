@@ -129,5 +129,17 @@ export const api = {
       });
       return res.json();
     }
-  }
+  },
+  books: {
+    getAll: async () => {
+      const res = await fetch(`${API_URL}/books`);
+      if (!res.ok) throw new Error('Failed to fetch books');
+      return res.json();
+    },
+    getById: async (id: string) => {
+      const res = await fetch(`${API_URL}/books/${id}`);
+      if (!res.ok) throw new Error('Failed to fetch book');
+      return res.json();
+    },
+  },
 };

@@ -24,7 +24,7 @@ export default function Home() {
       try {
         const [courseRes, bookRes] = await Promise.all([
           api.courses.getAll(),
-          fetch('/api/v1/books').then(res => res.json())
+          api.books.getAll()
         ]);
         
         if (courseRes.success) {

@@ -1,13 +1,10 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { api } from '../services/api';
 import { useCart } from '../hooks/useCart';
 import { SplitText } from '../components/animations/SplitText';
 import { AnimatedList } from '../components/animations/AnimatedList';
 import { formatCurrency } from '../utils/currencies';
-
-const API_URL = import.meta.env.VITE_API_URL
-  ? (import.meta.env.VITE_API_URL.endsWith('/api/v1') ? import.meta.env.VITE_API_URL : `${import.meta.env.VITE_API_URL}/api/v1`)
-  : '/api/v1';
 
 import { BookOpen, Search, Laptop, Briefcase, Microscope, Calculator, Palette, Globe, Car } from 'lucide-react';
 
@@ -38,8 +35,7 @@ export default function Books() {
 
   const fetchBooks = async () => {
     try {
-      const res = await fetch(`${API_URL}/books`);
-      const data = await res.json();
+      const data = await api.books.getAll();
       if (data.success) setBooks(data.data);
     } catch (err) {
       console.error('Failed to fetch books', err);

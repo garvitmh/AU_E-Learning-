@@ -59,14 +59,14 @@ const mockMentorApplications = [
 ];
 
 const mockBooks = [
-  { title: 'The Pragmatic Programmer', author: 'Andy Hunt', description: 'Your journey to mastery. Covers best practices, tips, and tricks for building robust software across all domains.', price: 599, category: 'programming', stock: 15, image: 'https://m.media-amazon.com/images/I/51W1sBPO7tL._SL1000_.jpg' },
-  { title: 'Clean Architecture', author: 'Robert C. Martin', description: 'A craftsman\'s guide to software structure and design. Learn how to build maintainable and scalable systems.', price: 649, category: 'programming', stock: 8, image: 'https://m.media-amazon.com/images/I/61rJRcc00AL._SL1000_.jpg' },
-  { title: 'Designing Data-Intensive Applications', author: 'Martin Kleppmann', description: 'The big ideas behind reliable, scalable, and maintainable systems. A must-read for backend engineers.', price: 799, category: 'programming', stock: 12, image: 'https://m.media-amazon.com/images/I/81q2A3PyyDL._SL1000_.jpg' },
-  { title: 'To Mock a Mockingbird', author: 'Raymond Smullyan', description: 'An entertaining collection of logical puzzles that introduce combinatory logic in an accessible way.', price: 299, category: 'math', stock: 20, image: 'https://m.media-amazon.com/images/I/71Xm+Q6bZOL._SL1088_.jpg' },
-  { title: 'Deep Learning', author: 'Ian Goodfellow', description: 'A comprehensive guide to building AI systems. Covers neural networks, optimization, and practical applications.', price: 899, category: 'science', stock: 5, image: 'https://m.media-amazon.com/images/I/61qbgXIxV-L._SL1500_.jpg' },
-  { title: 'JavaScript: The Good Parts', author: 'Douglas Crockford', description: 'Unearths the best features of JavaScript that make it an outstanding object-oriented programming language.', price: 399, category: 'programming', stock: 25, image: 'https://m.media-amazon.com/images/I/81kqrwS1nNL._SL1500_.jpg' },
-  { title: 'The Lean Startup', author: 'Eric Ries', description: 'How constant innovation and validated learning creates radically successful businesses with less waste.', price: 349, category: 'business', stock: 30, image: 'https://m.media-amazon.com/images/I/81-QB7nDh4L._SL1500_.jpg' },
-  { title: 'Thinking, Fast and Slow', author: 'Daniel Kahneman', description: 'Explores the two systems of thought that drive the way we think and make choices. A Nobel Prize winner\'s masterpiece.', price: 329, category: 'business', stock: 40, image: 'https://m.media-amazon.com/images/I/71R1YFwM+pL._SL1500_.jpg' }
+  { title: 'The Pragmatic Programmer', author: 'Andy Hunt', description: 'Your journey to mastery. Covers best practices, tips, and tricks for building robust software across all domains.', price: 599, category: 'programming', stock: 15, image: 'https://covers.openlibrary.org/b/isbn/9780135957059-L.jpg' },
+  { title: 'Clean Architecture', author: 'Robert C. Martin', description: 'A craftsman\'s guide to software structure and design. Learn how to build maintainable and scalable systems.', price: 649, category: 'programming', stock: 8, image: 'https://covers.openlibrary.org/b/isbn/9780134494166-L.jpg' },
+  { title: 'Designing Data-Intensive Applications', author: 'Martin Kleppmann', description: 'The big ideas behind reliable, scalable, and maintainable systems. A must-read for backend engineers.', price: 799, category: 'programming', stock: 12, image: 'https://covers.openlibrary.org/b/isbn/9781449373320-L.jpg' },
+  { title: 'To Mock a Mockingbird', author: 'Raymond Smullyan', description: 'An entertaining collection of logical puzzles that introduce combinatory logic in an accessible way.', price: 299, category: 'math', stock: 20, image: 'https://covers.openlibrary.org/b/isbn/9780192801425-L.jpg' },
+  { title: 'Deep Learning', author: 'Ian Goodfellow', description: 'A comprehensive guide to building AI systems. Covers neural networks, optimization, and practical applications.', price: 899, category: 'science', stock: 5, image: 'https://covers.openlibrary.org/b/isbn/9780262035613-L.jpg' },
+  { title: 'JavaScript: The Good Parts', author: 'Douglas Crockford', description: 'Unearths the best features of JavaScript that make it an outstanding object-oriented programming language.', price: 399, category: 'programming', stock: 25, image: 'https://covers.openlibrary.org/b/isbn/9780596517748-L.jpg' },
+  { title: 'The Lean Startup', author: 'Eric Ries', description: 'How constant innovation and validated learning creates radically successful businesses with less waste.', price: 349, category: 'business', stock: 30, image: 'https://covers.openlibrary.org/b/isbn/9780307887894-L.jpg' },
+  { title: 'Thinking, Fast and Slow', author: 'Daniel Kahneman', description: 'Explores the two systems of thought that drive the way we think and make choices. A Nobel Prize winner\'s masterpiece.', price: 329, category: 'business', stock: 40, image: 'https://covers.openlibrary.org/b/isbn/9780374533557-L.jpg' }
 ];
 
 const mockCourses = [
@@ -78,7 +78,7 @@ const mockCourses = [
     category: 'kindergarten',
     price: 499,
     rating: 5.0,
-    image: 'https://placehold.co/400x220/FFD166/333?text=Phonics+Fun',
+    image: 'https://image.pollinations.ai/prompt/kindergarten%20phonics%20colorful%20letters?width=400&height=220&nologo=true',
     videos: [
       { title: 'Welcome to Phonics!', videoUrl: '', duration: '8:00' },
       { title: 'The Letter A and B', videoUrl: '', duration: '10:30' },
@@ -92,7 +92,7 @@ const mockCourses = [
     category: 'kindergarten',
     price: 399,
     rating: 4.9,
-    image: 'https://placehold.co/400x220/06D6A0/333?text=Numbers+Fun',
+    image: 'https://image.pollinations.ai/prompt/kindergarten%20math%20numbers%20toys?width=400&height=220&nologo=true',
     videos: [
       { title: 'Counting 1 to 10', videoUrl: '', duration: '9:00' },
       { title: 'Counting 11 to 20', videoUrl: '', duration: '9:30' },
@@ -105,7 +105,7 @@ const mockCourses = [
     category: 'kindergarten',
     price: 299,
     rating: 4.8,
-    image: 'https://placehold.co/400x220/EF476F/fff?text=Creative+Arts',
+    image: 'https://image.pollinations.ai/prompt/kids%20painting%20art%20supplies?width=400&height=220&nologo=true',
     videos: [
       { title: 'Drawing Shapes', videoUrl: '', duration: '11:00' },
       { title: 'Finger Painting Fun', videoUrl: '', duration: '13:00' },
@@ -120,7 +120,7 @@ const mockCourses = [
     category: 'highschool',
     price: 799,
     rating: 4.7,
-    image: 'https://placehold.co/400x220/118AB2/fff?text=Algebra',
+    image: 'https://image.pollinations.ai/prompt/mathematics%20algebra%20equation%20blackboard?width=400&height=220&nologo=true',
     videos: [
       { title: 'Introduction to Variables', videoUrl: '', duration: '15:00' },
       { title: 'Linear Equations', videoUrl: '', duration: '18:30' },
@@ -134,7 +134,7 @@ const mockCourses = [
     category: 'highschool',
     price: 699,
     rating: 4.6,
-    image: 'https://placehold.co/400x220/F4A261/333?text=World+History',
+    image: 'https://image.pollinations.ai/prompt/ancient%20history%20world%20globe?width=400&height=220&nologo=true',
     videos: [
       { title: 'Ancient Civilizations', videoUrl: '', duration: '22:00' },
       { title: 'Rise of Empires', videoUrl: '', duration: '19:00' },
@@ -147,7 +147,7 @@ const mockCourses = [
     category: 'highschool',
     price: 749,
     rating: 4.8,
-    image: 'https://placehold.co/400x220/2A9D8F/fff?text=English+Lit',
+    image: 'https://image.pollinations.ai/prompt/classic%20literature%20books%20library?width=400&height=220&nologo=true',
     videos: [
       { title: 'Introduction to Literary Analysis', videoUrl: '', duration: '16:00' },
       { title: 'Shakespeare: Romeo & Juliet', videoUrl: '', duration: '25:00' },
@@ -160,7 +160,7 @@ const mockCourses = [
     category: 'highschool',
     price: 899,
     rating: 4.7,
-    image: 'https://placehold.co/400x220/E9C46A/333?text=Physics',
+    image: 'https://image.pollinations.ai/prompt/physics%20experiments%20pendulum?width=400&height=220&nologo=true',
     videos: [
       { title: 'Forces and Motion', videoUrl: '', duration: '20:00' },
       { title: 'Energy and Work', videoUrl: '', duration: '18:00' },
@@ -175,7 +175,7 @@ const mockCourses = [
     category: 'college',
     price: 1299,
     rating: 4.5,
-    image: 'https://placehold.co/400x220/9B5DE5/fff?text=Calculus+101',
+    image: 'https://image.pollinations.ai/prompt/advanced%20calculus%20integral%20math?width=400&height=220&nologo=true',
     videos: [
       { title: 'Limits and Continuity', videoUrl: '', duration: '25:00' },
       { title: 'Derivatives Defined', videoUrl: '', duration: '30:00' },
@@ -189,7 +189,7 @@ const mockCourses = [
     category: 'college',
     price: 999,
     rating: 4.6,
-    image: 'https://placehold.co/400x220/F72585/fff?text=Microeconomics',
+    image: 'https://image.pollinations.ai/prompt/microeconomics%20finance%20chart?width=400&height=220&nologo=true',
     videos: [
       { title: 'Supply and Demand', videoUrl: '', duration: '22:00' },
       { title: 'Market Structures', videoUrl: '', duration: '20:00' },
@@ -202,7 +202,7 @@ const mockCourses = [
     category: 'college',
     price: 1099,
     rating: 4.9,
-    image: 'https://placehold.co/400x220/7209B7/fff?text=Psychology',
+    image: 'https://image.pollinations.ai/prompt/human%20brain%20psychology%20mind?width=400&height=220&nologo=true',
     videos: [
       { title: 'History of Psychology', videoUrl: '', duration: '20:00' },
       { title: 'Brain and Behavior', videoUrl: '', duration: '24:00' },
@@ -215,7 +215,7 @@ const mockCourses = [
     category: 'college',
     price: 1499,
     rating: 4.4,
-    image: 'https://placehold.co/400x220/4361EE/fff?text=Organic+Chem',
+    image: 'https://image.pollinations.ai/prompt/organic%20chemistry%20molecules%20laboratory?width=400&height=220&nologo=true',
     videos: [
       { title: 'Introduction to Functional Groups', videoUrl: '', duration: '28:00' },
       { title: 'Alkanes and Alkenes', videoUrl: '', duration: '30:00' },
@@ -230,7 +230,7 @@ const mockCourses = [
     category: 'computer',
     price: 1299,
     rating: 4.9,
-    image: 'https://placehold.co/400x220/3A86FF/fff?text=Python',
+    image: 'https://image.pollinations.ai/prompt/python%20programming%20code%20screen?width=400&height=220&nologo=true',
     videos: [
       { title: 'Getting Started with Python', videoUrl: '', duration: '18:00' },
       { title: 'Variables and Data Types', videoUrl: '', duration: '22:00' },
@@ -244,7 +244,7 @@ const mockCourses = [
     category: 'computer',
     price: 1999,
     rating: 4.9,
-    image: 'https://placehold.co/400x220/00B4D8/333?text=React+%26+Node',
+    image: 'https://image.pollinations.ai/prompt/react%20nodejs%20web%20development%20code?width=400&height=220&nologo=true',
     videos: [
       { title: 'React Fundamentals', videoUrl: '', duration: '30:00' },
       { title: 'Building RESTful APIs', videoUrl: '', duration: '35:00' },
@@ -258,7 +258,7 @@ const mockCourses = [
     category: 'computer',
     price: 1799,
     rating: 4.9,
-    image: 'https://placehold.co/400x220/480CA8/fff?text=DSA',
+    image: 'https://image.pollinations.ai/prompt/data%20structures%20algorithms%20binary%20tree?width=400&height=220&nologo=true',
     videos: [
       { title: 'Arrays and Strings', videoUrl: '', duration: '25:00' },
       { title: 'Linked Lists', videoUrl: '', duration: '28:00' },
@@ -272,7 +272,7 @@ const mockCourses = [
     category: 'computer',
     price: 999,
     rating: 4.7,
-    image: 'https://placehold.co/400x220/F72585/fff?text=Web+Design',
+    image: 'https://image.pollinations.ai/prompt/modern%20web%20design%20ui%20ux?width=400&height=220&nologo=true',
     videos: [
       { title: 'HTML Fundamentals', videoUrl: '', duration: '20:00' },
       { title: 'CSS Flexbox', videoUrl: '', duration: '22:00' },
@@ -288,7 +288,7 @@ const mockCourses = [
     category: 'science',
     price: 1199,
     rating: 4.8,
-    image: 'https://placehold.co/400x220/1D2671/fff?text=Astrophysics',
+    image: 'https://image.pollinations.ai/prompt/astrophysics%20galaxy%20universe%20stars?width=400&height=220&nologo=true',
     videos: [
       { title: 'The Scale of the Universe', videoUrl: '', duration: '25:00' },
       { title: 'Stars and Their Life Cycles', videoUrl: '', duration: '28:00' },
@@ -301,7 +301,7 @@ const mockCourses = [
     category: 'science',
     price: 1099,
     rating: 4.6,
-    image: 'https://placehold.co/400x220/FF6B6B/fff?text=Human+Biology',
+    image: 'https://image.pollinations.ai/prompt/human%20anatomy%20biology%20dna?width=400&height=220&nologo=true',
     videos: [
       { title: 'Introduction to Human Anatomy', videoUrl: '', duration: '22:00' },
       { title: 'The Nervous System', videoUrl: '', duration: '26:00' },
@@ -314,7 +314,7 @@ const mockCourses = [
     category: 'science',
     price: 799,
     rating: 4.7,
-    image: 'https://placehold.co/400x220/52B788/fff?text=Env+Science',
+    image: 'https://image.pollinations.ai/prompt/environmental%20science%20nature%20earth?width=400&height=220&nologo=true',
     videos: [
       { title: 'Ecosystems Explained', videoUrl: '', duration: '20:00' },
       { title: 'Climate Change Fundamentals', videoUrl: '', duration: '24:00' },
@@ -329,7 +329,7 @@ const mockCourses = [
     category: 'engineering',
     price: 1499,
     rating: 4.5,
-    image: 'https://placehold.co/400x220/E76F51/fff?text=Mech+Eng',
+    image: 'https://image.pollinations.ai/prompt/mechanical%20engineering%20gears%20machinery?width=400&height=220&nologo=true',
     videos: [
       { title: 'Introduction to Thermodynamics', videoUrl: '', duration: '28:00' },
       { title: 'Fluid Mechanics Basics', videoUrl: '', duration: '25:00' },
@@ -342,7 +342,7 @@ const mockCourses = [
     category: 'engineering',
     price: 1299,
     rating: 4.8,
-    image: 'https://placehold.co/400x220/023E8A/fff?text=Electronics',
+    image: 'https://image.pollinations.ai/prompt/electrical%20circuit%20board%20electronics?width=400&height=220&nologo=true',
     videos: [
       { title: "Ohm's Law & Resistors", videoUrl: '', duration: '20:00' },
       { title: "Kirchhoff's Laws", videoUrl: '', duration: '22:00' },
@@ -356,7 +356,7 @@ const mockCourses = [
     category: 'engineering',
     price: 1199,
     rating: 4.6,
-    image: 'https://placehold.co/400x220/264653/fff?text=Structural+Eng',
+    image: 'https://image.pollinations.ai/prompt/structural%20engineering%20bridge%20blueprint?width=400&height=220&nologo=true',
     videos: [
       { title: 'Types of Loads', videoUrl: '', duration: '18:00' },
       { title: 'Beam Analysis', videoUrl: '', duration: '22:00' },

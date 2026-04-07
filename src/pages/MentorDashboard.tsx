@@ -29,6 +29,8 @@ export default function MentorDashboard() {
   const [isSavingCourse, setIsSavingCourse] = useState(false);
   const [toast, setToast] = useState<ToastType>(null);
   const [stats, setStats] = useState({ totalStudents: 0, totalEarnings: 0, rating: 4.8 });
+  const [financials, setFinancials] = useState<{ totalRevenue: number; totalEnrollments: number; courses: any[] }>({ totalRevenue: 0, totalEnrollments: 0, courses: [] });
+  const [loadingFinancials, setLoadingFinancials] = useState(false);
   const [expandedCourseId, setExpandedCourseId] = useState<string | null>(null);
   const [editingCourse, setEditingCourse] = useState<any | null>(null);
   const [videoDraft, setVideoDraft] = useState({
@@ -52,6 +54,7 @@ export default function MentorDashboard() {
     if (user && (user.role === 'mentor' || user.role === 'admin')) {
       fetchMyCourses();
       fetchStats();
+      fetchFinancials();
     }
   }, [user]);
 
@@ -86,7 +89,7 @@ export default function MentorDashboard() {
         if (data.success) setStats(data.data);
       }
     } catch (err) {
-      // Stats endpoint may not exist yet — silently ignore
+      // Stats endpoint may not exist yet - silently ignore
     }
   };
 
@@ -115,7 +118,7 @@ export default function MentorDashboard() {
     setIsSubmitting(true);
 
     try {
-      const token = localStorage.getItem('auth_token'); // ← correct key
+      const token = localStorage.getItem('auth_token'); // correct key
       const res = await fetch('/api/v1/courses', {
         method: 'POST',
         headers: {
@@ -165,6 +168,27 @@ export default function MentorDashboard() {
     } catch (err) {
       console.error('Failed to delete course', err);
       showToast('error', 'Network error. Please try again.');
+    }
+  };
+
+  const fetchFinancials = async () => {
+    try {
+      setLoadingFinancials(true);
+      const token = localStorage.getItem('auth_token');
+      const res = await fetch('/api/v1/mentor/financials', {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        if (data.success) {
+          setFinancials(data.data);
+        }
+      }
+    } catch (err) {
+      console.error('Failed to fetch financials', err);
+    } finally {
+      setLoadingFinancials(false);
     }
   };
 
@@ -308,7 +332,7 @@ export default function MentorDashboard() {
         }`}>
           {toast.type === 'success' ? <CheckCircle className="w-5 h-5 shrink-0 mt-0.5" /> : <XCircle className="w-5 h-5 shrink-0 mt-0.5" />}
           <span className="text-sm font-semibold">{toast.message}</span>
-          <button onClick={() => setToast(null)} className="ml-auto opacity-60 hover:opacity-100">✕</button>
+          <button onClick={() => setToast(null)} className="ml-auto opacity-60 hover:opacity-100">x</button>
         </div>
       )}
 
@@ -552,7 +576,7 @@ export default function MentorDashboard() {
                               <Badge variant="secondary">{course.category}</Badge>
                               <span className="font-semibold text-primary">{formatCurrency(course.price)}</span>
                               <span className="text-base-content/60 text-xs flex items-center gap-1"><Video className="w-3 h-3" />{(course.videos || []).length} videos</span>
-                              <Link to={`/courses/${course._id}`} className="text-base-content/50 hover:text-primary text-xs underline">View Live →</Link>
+                              <Link to={`/courses/${course._id}`} className="text-base-content/50 hover:text-primary text-xs underline">View Live {'->'}</Link>
                             </div>
                           </div>
                         </div>
@@ -637,7 +661,7 @@ export default function MentorDashboard() {
                                       <div className="min-w-0">
                                         <div className="font-semibold truncate">{video.title}</div>
                                         <div className="text-xs text-base-content/60 truncate">{video.videoUrl}</div>
-                                        <div className="text-xs text-base-content/50">{video.duration} {video.isTrial ? '• Free Preview' : ''}</div>
+                                        <div className="text-xs text-base-content/50">{video.duration} {video.isTrial ? '- Free Preview' : ''}</div>
                                       </div>
                                       <Button variant="danger" size="sm" onClick={() => handleRemoveVideo(index)}><Trash2 className="w-4 h-4" /></Button>
                                     </div>
@@ -707,11 +731,71 @@ export default function MentorDashboard() {
           {activeTab === 'earnings' && (
             <div className="animate-fadeIn">
               <h2 className="text-2xl font-bold mb-6">Financial Reports</h2>
-              <div className="bg-base-100 p-8 rounded-xl border border-base-300 text-center mb-8">
-                <BarChart3 className="w-16 h-16 mx-auto text-primary mb-4" />
-                <h3 className="text-xl font-bold mb-2">Analytics Coming Soon</h3>
-                <p className="text-base-content/60 max-w-lg mx-auto">We are building a robust charting experience to show your revenue growth, student demographics, and course performance.</p>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                <Card className="bg-base-100 border border-base-300 shadow-sm">
+                  <CardBody className="p-5">
+                    <div className="text-sm font-bold text-base-content/60 uppercase tracking-wider mb-1">Total Revenue</div>
+                    <div className="text-3xl font-black text-success">{formatCurrency(financials.totalRevenue || stats.totalEarnings)}</div>
+                  </CardBody>
+                </Card>
+                <Card className="bg-base-100 border border-base-300 shadow-sm">
+                  <CardBody className="p-5">
+                    <div className="text-sm font-bold text-base-content/60 uppercase tracking-wider mb-1">Enrollments</div>
+                    <div className="text-3xl font-black">{financials.totalEnrollments || stats.totalStudents}</div>
+                  </CardBody>
+                </Card>
+                <Card className="bg-base-100 border border-base-300 shadow-sm">
+                  <CardBody className="p-5">
+                    <div className="text-sm font-bold text-base-content/60 uppercase tracking-wider mb-1">Avg Course Revenue</div>
+                    <div className="text-3xl font-black text-primary">
+                      {formatCurrency(
+                        (financials.courses?.length || 0) > 0
+                          ? (financials.totalRevenue || 0) / financials.courses.length
+                          : 0
+                      )}
+                    </div>
+                  </CardBody>
+                </Card>
               </div>
+
+              <Card className="bg-base-100 border border-base-300 shadow-sm">
+                <CardHeader className="border-b border-base-200 pb-4">
+                  <h3 className="text-xl font-bold">Course-wise Revenue</h3>
+                  <p className="text-sm text-base-content/60">Revenue and enrollment breakdown for your published courses.</p>
+                </CardHeader>
+                <CardBody className="pt-4">
+                  {loadingFinancials ? (
+                    <div className="text-center py-8 text-base-content/60">Loading financial breakdown...</div>
+                  ) : (financials.courses || []).length === 0 ? (
+                    <div className="text-center py-8 text-base-content/60">No published courses yet.</div>
+                  ) : (
+                    <div className="overflow-x-auto">
+                      <table className="table w-full">
+                        <thead className="bg-base-200 text-base-content/80">
+                          <tr>
+                            <th>Course</th>
+                            <th>Category</th>
+                            <th>Price</th>
+                            <th>Enrollments</th>
+                            <th>Revenue</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {(financials.courses || []).map((course: any) => (
+                            <tr key={course.courseId} className="hover">
+                              <td className="font-semibold">{course.title}</td>
+                              <td><Badge variant="secondary">{course.category}</Badge></td>
+                              <td>{formatCurrency(course.price || 0)}</td>
+                              <td>{course.enrollments}</td>
+                              <td className="font-bold text-success">{formatCurrency(course.revenue || 0)}</td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  )}
+                </CardBody>
+              </Card>
             </div>
           )}
 

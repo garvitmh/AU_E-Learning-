@@ -39,6 +39,7 @@ const mentor = require('./routes/mentor');
 const books = require('./routes/books');
 const admin = require('./routes/admin');
 const payment = require('./routes/payment');
+const newsletter = require('./routes/newsletter');
 
 // Mount routers
 app.use('/api/v1/auth', auth);
@@ -48,6 +49,7 @@ app.use('/api/v1/mentor', mentor);
 app.use('/api/v1/books', books);
 app.use('/api/v1/admin', admin);
 app.use('/api/v1/payment', payment);
+app.use('/api/v1/newsletter', newsletter);
 
 app.get('/', (req, res) => {
   res.json({ message: 'Welcome to Coursiva API' });

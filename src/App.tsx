@@ -24,6 +24,11 @@ const BookDetail = React.lazy(() => import('./pages/BookDetail.tsx'));
 const ProfileSettings = React.lazy(() => import('./pages/ProfileSettings.tsx'));
 const QuizView = React.lazy(() => import('./pages/QuizView.tsx'));
 const ForgotPassword = React.lazy(() => import('./pages/ForgotPassword.tsx'));
+const About = React.lazy(() => import('./pages/About.tsx'));
+const Contact = React.lazy(() => import('./pages/Contact.tsx'));
+const FAQ = React.lazy(() => import('./pages/FAQ.tsx'));
+const Privacy = React.lazy(() => import('./pages/Privacy.tsx'));
+const Terms = React.lazy(() => import('./pages/Terms.tsx'));
 
 // Import components
 import Navbar from './components/shared/Navbar';
@@ -68,6 +73,11 @@ export default function App() {
                           />
                           <Route path="/books" element={<Books />} />
                           <Route path="/books/:id" element={<BookDetail />} />
+                          <Route path="/about" element={<About />} />
+                          <Route path="/contact" element={<Contact />} />
+                          <Route path="/faq" element={<FAQ />} />
+                          <Route path="/privacy" element={<Privacy />} />
+                          <Route path="/terms" element={<Terms />} />
                           <Route path="/signup" element={<Signup />} />
                           <Route path="/login" element={<Login />} />
                           <Route path="/forgot-password" element={<ForgotPassword />} />

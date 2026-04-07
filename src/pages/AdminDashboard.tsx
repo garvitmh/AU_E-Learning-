@@ -16,6 +16,8 @@ export default function AdminDashboard() {
   const [courses, setCourses] = useState<any[]>([]);
   const [enrollments, setEnrollments] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const pageSize = 10;
 
   const fetchData = async () => {
     try {
@@ -59,6 +61,10 @@ export default function AdminDashboard() {
       fetchData();
     }
   }, [user]);
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [activeTab, searchQuery]);
 
   const handleUpdateApplicationStatus = async (appId: string, newStatus: 'accepted' | 'rejected') => {
     try {
@@ -131,6 +137,46 @@ export default function AdminDashboard() {
   }, [isAuthenticated, user, navigate]);
 
   if (!user || user.role !== 'admin') return null;
+
+  const normalizedSearch = searchQuery.trim().toLowerCase();
+
+  const filteredApplications = applications.filter((app) =>
+    app.name?.toLowerCase().includes(normalizedSearch) ||
+    app.email?.toLowerCase().includes(normalizedSearch) ||
+    app.expertise?.toLowerCase().includes(normalizedSearch)
+  );
+
+  const filteredUsers = users.filter((u) =>
+    u.username?.toLowerCase().includes(normalizedSearch) ||
+    u.email?.toLowerCase().includes(normalizedSearch)
+  );
+
+  const filteredCourses = courses.filter((c) =>
+    c.title?.toLowerCase().includes(normalizedSearch) ||
+    c.category?.toLowerCase().includes(normalizedSearch)
+  );
+
+  const filteredEnrollments = enrollments.filter((e) =>
+    e.user?.username?.toLowerCase().includes(normalizedSearch) ||
+    e.user?.email?.toLowerCase().includes(normalizedSearch) ||
+    e.course?.title?.toLowerCase().includes(normalizedSearch)
+  );
+
+  const activeData =
+    activeTab === 'applications' ? filteredApplications :
+    activeTab === 'users' ? filteredUsers :
+    activeTab === 'courses' ? filteredCourses :
+    filteredEnrollments;
+
+  const totalPages = Math.max(1, Math.ceil(activeData.length / pageSize));
+  const safeCurrentPage = Math.min(currentPage, totalPages);
+  const startIdx = (safeCurrentPage - 1) * pageSize;
+  const endIdx = startIdx + pageSize;
+
+  const paginatedApplications = filteredApplications.slice(startIdx, endIdx);
+  const paginatedUsers = filteredUsers.slice(startIdx, endIdx);
+  const paginatedCourses = filteredCourses.slice(startIdx, endIdx);
+  const paginatedEnrollments = filteredEnrollments.slice(startIdx, endIdx);
 
   return (
     <div className="min-h-screen bg-base-200">
@@ -215,7 +261,7 @@ export default function AdminDashboard() {
                     {isLoading ? (
                       <tr><td colSpan={6} className="text-center py-8">Loading applications...</td></tr>
                     ) : (
-                      applications.filter(app => app.name.toLowerCase().includes(searchQuery.toLowerCase())).map(app => (
+                      paginatedApplications.map(app => (
                         <tr key={app.id || app._id} className="hover">
                           <td className="font-semibold">{app.name}</td>
                           <td>{app.expertise}</td>
@@ -274,7 +320,7 @@ export default function AdminDashboard() {
                     {isLoading ? (
                        <tr><td colSpan={6} className="text-center py-8">Loading users...</td></tr>
                     ) : (
-                      users.filter(u => u.username.toLowerCase().includes(searchQuery.toLowerCase())).map(u => (
+                      paginatedUsers.map(u => (
                         <tr key={u._id || u.id} className="hover">
                           <td className="font-bold flex items-center gap-3">
                              <div className="w-8 h-8 rounded-full bg-primary/10 text-primary flex items-center justify-center font-bold text-xs border border-primary/20">
@@ -328,7 +374,7 @@ export default function AdminDashboard() {
                     {isLoading ? (
                        <tr><td colSpan={6} className="text-center py-8">Loading courses...</td></tr>
                     ) : (
-                      courses.filter(c => c.title.toLowerCase().includes(searchQuery.toLowerCase())).map(c => (
+                      paginatedCourses.map(c => (
                         <tr key={c._id || c.id} className="hover">
                           <td className="font-bold max-w-[250px] truncate" title={c.title}>{c.title}</td>
                           <td className="text-base-content/80">{c.instructor?.username || c.instructor || 'Unknown'}</td>
@@ -376,7 +422,7 @@ export default function AdminDashboard() {
                     {isLoading ? (
                        <tr><td colSpan={5} className="text-center py-8">Loading enrollments...</td></tr>
                     ) : (
-                      enrollments.filter(e => e.user?.username.toLowerCase().includes(searchQuery.toLowerCase()) || e.course?.title.toLowerCase().includes(searchQuery.toLowerCase())).map(e => (
+                      paginatedEnrollments.map(e => (
                         <tr key={e._id || e.id} className="hover">
                           <td className="font-bold">{e.user?.username || 'Unknown'} <span className="block text-xs font-normal text-base-content/60">{e.user?.email}</span></td>
                           <td className="text-base-content/80 max-w-[200px] truncate" title={e.course?.title}>{e.course?.title || 'Unknown Course'}</td>
@@ -406,13 +452,27 @@ export default function AdminDashboard() {
 
             </div>
             
-            {/* Pagination Mock Footer */}
+            {/* Pagination Footer */}
             <div className="bg-base-200 p-4 border-t border-base-300 flex justify-between items-center">
-               <span className="text-sm text-base-content/70">Showing 1 to {activeTab === 'users' ? users.length : activeTab === 'courses' ? courses.length : activeTab === 'enrollments' ? enrollments.length : applications.length} of entries</span>
+               <span className="text-sm text-base-content/70">
+                 Showing {activeData.length === 0 ? 0 : startIdx + 1} to {Math.min(endIdx, activeData.length)} of {activeData.length} entries
+               </span>
                <div className="join">
-                 <button className="join-item btn btn-sm btn-disabled">«</button>
-                 <button className="join-item btn btn-sm bg-base-100">Page 1</button>
-                 <button className="join-item btn btn-sm btn-disabled">»</button>
+                 <button
+                   className="join-item btn btn-sm"
+                   disabled={safeCurrentPage <= 1}
+                   onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+                 >
+                   {'<<'}
+                 </button>
+                 <button className="join-item btn btn-sm bg-base-100">Page {safeCurrentPage} / {totalPages}</button>
+                 <button
+                   className="join-item btn btn-sm"
+                   disabled={safeCurrentPage >= totalPages}
+                   onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+                 >
+                   {'>>'}
+                 </button>
                </div>
             </div>
 

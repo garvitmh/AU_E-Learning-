@@ -128,3 +128,43 @@ exports.getMentorStats = async (req, res, next) => {
     res.status(500).json({ success: false, error: 'Server Error' });
   }
 };
+
+// @desc    Get mentor financial breakdown by course
+// @route   GET /api/v1/mentor/financials
+// @access  Private/Mentor
+exports.getMentorFinancials = async (req, res, next) => {
+  try {
+    const myCourses = await Course.find({ instructor: req.user.id }).select('title price category image createdAt');
+
+    const courseFinancials = await Promise.all(
+      myCourses.map(async (course) => {
+        const enrollments = await Enrollment.countDocuments({ course: course._id });
+        return {
+          courseId: course._id,
+          title: course.title,
+          category: course.category,
+          image: course.image,
+          price: course.price || 0,
+          enrollments,
+          revenue: enrollments * (course.price || 0),
+          createdAt: course.createdAt,
+        };
+      })
+    );
+
+    const sorted = courseFinancials.sort((a, b) => b.revenue - a.revenue);
+    const totalRevenue = sorted.reduce((sum, c) => sum + c.revenue, 0);
+    const totalEnrollments = sorted.reduce((sum, c) => sum + c.enrollments, 0);
+
+    res.status(200).json({
+      success: true,
+      data: {
+        totalRevenue,
+        totalEnrollments,
+        courses: sorted
+      }
+    });
+  } catch (err) {
+    res.status(500).json({ success: false, error: 'Server Error' });
+  }
+};
